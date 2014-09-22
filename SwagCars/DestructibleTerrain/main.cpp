@@ -1,11 +1,13 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_opengl.h>
-
 #include <string>
 #include <stdlib.h>
 #include <iostream>
 #include <time.h>
+#include <vector>
+
+#include <SDL.h>
+#include <SDL_opengl.h>
+#include <gl/GLU.h>
+#include <gl/GL.h>
 
 #include "global.h"
 #include "car.h"
@@ -22,6 +24,7 @@ bool gKeySpace;
 bool gMouseLeft;
 bool gMouseRight;
 bool gKeyA;
+SDL_Window *gScreen;
 
 Point gMouse;
 
@@ -43,13 +46,15 @@ int main(int argc, char* args[])
 	SDL_Init( SDL_INIT_EVERYTHING );
 
 	// Start video
-	SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_OPENGL);
+	gScreen = SDL_CreateWindow("Intelligent Systems",
+								SDL_WINDOWPOS_UNDEFINED,
+								SDL_WINDOWPOS_UNDEFINED,
+								SCREEN_WIDTH, SCREEN_HEIGHT,
+								SDL_WINDOW_FULLSCREEN | SDL_WINDOW_OPENGL);
+
 
 	// Start openGL
 	initGL();
-
-	// Window name (text on the top bar)
-	SDL_WM_SetCaption("Intelligent Systems", NULL);
 
 	// Seed Random
 	std::srand(time(NULL));
@@ -64,12 +69,17 @@ int main(int argc, char* args[])
 	int lastTicks = SDL_GetTicks();
 	int ticks;
 
-	Car *car = new Car();
+	std::vector<Car*> cars;
+
+	for (unsigned i = 0; i < 6; i++)
+	{
+		cars.push_back(new Car(i* floor( (float)SCREEN_WIDTH / 6.0f ) ));
+	}
 
 	while (!quitGame)
 	{
 		// White background
-		glClearColor(255.0f, 255.0f, 255.0f, 1.0); 
+		glClearColor(255.0f, 255.0f, 255.0f, 1.0);
 
 		// Detect input
 		SDL_Event ev;
@@ -147,9 +157,12 @@ int main(int argc, char* args[])
 		// Render
 		glClear( GL_COLOR_BUFFER_BIT );
 
-		car->update();
+		for (unsigned i = 0; i < cars.size(); i++)
+		{
+			cars.at(i)->update();
+		}
 
-		SDL_GL_SwapBuffers();
+		SDL_GL_SwapWindow(gScreen);
 
 		glFlush();
 
@@ -163,6 +176,11 @@ int main(int argc, char* args[])
 	}
 
 	//Quit SDL
+
+	for (unsigned i = 0; i < cars.size(); i++)
+	{
+		delete cars.at(i);
+	}
 
 	SDL_Quit();
 	return 0;

@@ -18,6 +18,8 @@
 extern bool gDebug;
 extern bool gDelay;
 
+extern SDL_Window *gScreen;
+
 extern const unsigned SCREEN_WIDTH;
 extern const unsigned SCREEN_HEIGHT;
 

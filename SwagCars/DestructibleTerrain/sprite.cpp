@@ -72,16 +72,16 @@ void Sprite::draw(Point pos, Point scale)
 	// Draw the texture as a plane (can allow for distortion even).
 	glBegin(GL_QUADS);
 		glTexCoord2i(0, 0);
-		glVertex2f(pos.x, pos.y);
+		glVertex2f(pos.x, pos.y + s.y);
 
 		glTexCoord2i(1, 0);
-		glVertex2f(pos.x+s.x, pos.y);
+		glVertex2f(pos.x + s.x, pos.y + s.y);
 
 		glTexCoord2i(1, 1);
-		glVertex2f(pos.x+s.x, pos.y-s.y);
+		glVertex2f(pos.x+s.x, pos.y);
 
 		glTexCoord2i(0, 1);
-		glVertex2f(pos.x, pos.y-s.y);
+		glVertex2f(pos.x, pos.y);
 	glEnd();
 }
 

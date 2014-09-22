@@ -33,6 +33,9 @@
     <ClCompile Include="car.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="text.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -46,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="car.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="text.h">
+      <Filter>Header Files\Render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
