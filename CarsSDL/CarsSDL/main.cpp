@@ -1,5 +1,6 @@
 #include <iostream>
 #include "SDL.h"
+#include "SDL_ttf.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,5 +9,6 @@ int main(int argc, char *argv[])
 		std::cout << SDL_GetError();
 		return 1;
 	}
+
 	return 0;
 }
