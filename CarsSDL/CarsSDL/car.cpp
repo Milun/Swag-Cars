@@ -11,8 +11,23 @@ Car::Car(int _x)
 
 void Car::Draw()
 {
-	text->Draw(x, y, "test");
+	text->Draw(x, y, "Current Charge: ");
 	sprite->Draw(x, y);
+}
+
+bool Car::Charge()
+{
+	currentCharge += chargeRate;
+
+	if (currentCharge >= maxCharge)
+	{
+		currentCharge = maxCharge;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 Car::~Car()

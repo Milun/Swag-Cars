@@ -13,9 +13,15 @@ private:
 		Text* text;
 		Sprite* sprite;
 
+		double currentCharge;
+		double chargeRate;
+		double maxCharge;
+
 public:
 	Car(int _x);
 	~Car();
+
+	bool Charge();
 
 	void Draw();
 };
