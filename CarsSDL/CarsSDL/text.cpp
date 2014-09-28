@@ -6,7 +6,7 @@ Text::Text(std::string fontname)
 	color.r = 0;
 	color.g = 0;
 	color.b = 0;
-	font = TTF_OpenFont("lazy.ttf", 28);
+	font = TTF_OpenFont("arial.ttf", 16);
 }
 
 void Text::Draw(int x, int y, std::string content)

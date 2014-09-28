@@ -4,7 +4,7 @@ Game::Game()
 {
 	for (unsigned i = 0; i < 6; i++)
 	{
-		cars[i] = new Car(i*120);
+		cars[i] = new Car(i*135 + 1);
 	}
 }
 

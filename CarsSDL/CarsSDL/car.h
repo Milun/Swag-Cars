@@ -13,6 +13,9 @@ private:
 		Text* text;
 		Sprite* sprite;
 
+		float charge;
+		float chargeMulti;
+
 public:
 	Car(int _x);
 	~Car();
