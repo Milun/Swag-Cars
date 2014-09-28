@@ -13,12 +13,23 @@ private:
 		Text* text;
 		Sprite* sprite;
 
-		float charge;
-		float chargeMulti;
+		double chargeCurrent;
+		double chargeRate;
+		double chargeMax;
+		double chargeUse;
 
+		bool chargeMe;
+
+		void Update();
 public:
 	Car(int _x);
 	~Car();
+
+	inline double GetChargeCurrent() { return chargeCurrent; };
+	inline double GetChargeRate() { return chargeRate; };
+	inline bool GetChargeMe() { return chargeMe; };
+
+	bool Charge();
 
 	void Draw();
 };
