@@ -8,6 +8,9 @@
 class Car
 {
 private:
+		static int count; //How many cars there are
+
+		int id;
 		int x, y;
 
 		Text* text;

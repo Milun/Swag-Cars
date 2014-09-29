@@ -2,6 +2,7 @@
 
 Car::Car(int _x)
 {
+	id = count++;
 	text = new Text("lazy.ttf");
 	sprite = new Sprite("spr_car.png");
 
@@ -12,7 +13,7 @@ Car::Car(int _x)
 void Car::Draw()
 {
 	text->Draw(x, y, "Current Charge: ");
-	sprite->Draw(x, y);
+	sprite->Draw(id, y);
 }
 
 bool Car::Charge()
