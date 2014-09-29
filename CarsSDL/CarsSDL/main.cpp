@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <string>
 
+#include <random>
+#include <time.h>
+
 #include "game.h"
 
 Game *game;
@@ -41,6 +44,8 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
+	srand(time(NULL));
+
 	SDL_Window* window = SDL_CreateWindow("Font Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
 	screen = SDL_GetWindowSurface(window);
 
