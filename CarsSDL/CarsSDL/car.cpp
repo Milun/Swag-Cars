@@ -2,6 +2,8 @@
 
 #include <random>
 
+int Car::count = 0;
+
 Car::Car(int _x)
 {
 	id = count++;
@@ -12,10 +14,10 @@ Car::Car(int _x)
 
 	x = _x;
 	y = 0;
-	chargeCurrent = 100.0;
-	chargeRate = (float)(rand() % 20 + 1)/100.0f;
-	chargeUse = (float)(rand() % 20 + 1) / 100.0f;
+	chargeRate = (float)(rand() % 20 + 1) / 100.0f;
+	chargeUse = (float)(rand() % 20 + 1)  / 100.0f;
 	chargeMax = 100.0;
+	chargeCurrent = chargeMax;
 }
 
 void Car::Update()

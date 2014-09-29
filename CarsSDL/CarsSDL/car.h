@@ -8,8 +8,6 @@
 class Car
 {
 private:
-		static int count; //How many cars there are
-
 		int id;
 		int x, y;
 
@@ -25,6 +23,8 @@ private:
 
 		void Update();
 public:
+	static int count; //How many cars there are
+
 	Car(int _x);
 	~Car();
 
