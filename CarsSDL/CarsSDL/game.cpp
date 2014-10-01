@@ -4,7 +4,7 @@ Game::Game()
 {
 	for (unsigned i = 0; i < 6; i++)
 	{
-		cars[i] = new Car(i*135 + 1);
+		cars[new Car(i * 135 + 1)] = 0;
 	}
 
 	spr = new Sprite("spr_charge.png");
@@ -12,47 +12,57 @@ Game::Game()
 	currentCar = -1;
 }
 
-
 void Game::Draw()
 {
 	spr->Draw(0, 380);
 
 	double max = 0;
 
-	if (currentCar == -1)
+	Car* nextCar = NextCarToCharge();
+
+	if (nextCar != nullptr)
 	{
-		for (unsigned i = 0; i < 6; i++)
+		nextCar->Charge();
+
+		if (nextCar->GetChargeMe() == false)
 		{
-			if (cars[i]->GetChargeMe())
-			{
-				if (cars[i]->GetChargeRate() > max)
-				{
-					max = cars[i]->GetChargeRate();
-					currentCar = i;
-				}
-			}
+			cars[nextCar] = 0;
 		}
 	}
 	
-	for (unsigned i = 0; i < 6; i++)
+	for (iterator = cars.begin(); iterator != cars.end(); iterator++)
 	{
-		cars[i]->Draw();
-	}
+		(iterator->first)->Draw();
 
-	if (currentCar != -1)
-	{
-		if (cars[currentCar]->Charge())
+		if ((iterator->first)->GetChargeMe())
 		{
-			currentCar = -1;
+			iterator->second++;
 		}
 	}
 }
 
+Car* Game::NextCarToCharge()
+{
+	Car* car = nullptr;
+
+	iterator = cars.begin();
+	car = iterator->first;
+	for (iterator; iterator != cars.end(); iterator++)
+	{
+		if (iterator->second > cars[car])
+		{
+			car = iterator->first;
+		}
+	}
+
+	return car;
+}
+
 Game::~Game()
 {
-	for (unsigned i = 0; i < 6; i++)
+	for (iterator; iterator != cars.end(); iterator++)
 	{
-		delete cars[i];
+		delete iterator->first;
 	}
 
 	delete spr;

@@ -31,6 +31,7 @@ public:
 	inline double GetChargeCurrent() { return chargeCurrent; };
 	inline double GetChargeRate() { return chargeRate; };
 	inline bool GetChargeMe() { return chargeMe; };
+	inline double ChargeLeft() { return chargeMax - chargeCurrent; }
 
 	bool Charge();
 
