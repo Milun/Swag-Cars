@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 	
 	srand(time(NULL));
 
-	SDL_Window* window = SDL_CreateWindow("Font Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow("Font Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1200, 600, SDL_WINDOW_SHOWN);
 	screen = SDL_GetWindowSurface(window);
 
 	game = new Game();

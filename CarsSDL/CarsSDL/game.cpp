@@ -1,4 +1,6 @@
 #include "game.h"
+#include <windows.h>
+#include <iostream>
 
 Game::Game()
 {
@@ -8,40 +10,97 @@ Game::Game()
 	}
 
 	spr = new Sprite("spr_charge.png");
-
-	currentCar = -1;
+	text = new Text("lazy.ttf");
 }
 
 void Game::Draw()
 {
 	spr->Draw(0, 380);
 
-	double max = 0;
+	text->Draw(850, 10, "Profit: $" + ThousandString(std::to_string(profit)) + ".00" );
+	text->Draw(850, 40, "Total waiting time caused: " + std::to_string(timeWasted) + " (+" + std::to_string(noOfWaitingCars) + ") per second");
 
-	Car* nextCar = NextCarToCharge();
+	ChargeCars();
+}
 
-	if (nextCar != nullptr)
+std::string Game::ThousandString(std::string pass)
+{
+	unsigned int length = strlen(pass.c_str()); 
+	std::string output;
+
+	unsigned int offset = length % 3; // Get the comma offset
+	for (unsigned int i = 0; i < length; ++i) // Loop each character
 	{
-		nextCar->Charge();
-
-		if (nextCar->GetChargeMe() == false)
+		// If our Index%3 == CommaOffset and this isn't first character, add a comma
+		if (i % 3 == offset && i)
 		{
-			cars[nextCar] = 0;
+			output += ','; // Add the comma
 		}
+		output += pass.at(i);
 	}
 	
+	return output;
+}
+
+void Game::ChargeCars()
+{
+	double max = 0;
+
+	NextCarToCharge();
+
+	if (currentCar != nullptr)
+	{
+		if (!currentCar->Charge())
+		{
+			currentCar->StopCharge();
+			currentCar = nullptr;
+		}
+		else
+		{
+			// Increase profits.
+			profit += 1;
+
+			if (currentCar->GetChargeMe() == false)
+			{
+				cars[currentCar] = 0;
+			}
+		}
+	}
+
+	noOfWaitingCars = 0;
+
 	for (iterator = cars.begin(); iterator != cars.end(); iterator++)
 	{
-		(iterator->first)->Draw();
+		iterator->first->Draw();
 
-		if ((iterator->first)->GetChargeMe())
+		// Cars that are charging do not count as "waiting" (their time is not being wasted afterall).
+		if (iterator->first->GetChargeMe())
 		{
 			iterator->second++;
+			noOfWaitingCars++;
+
+			// Add to the overall time wasted waiting of all cars.
+			if (IsNextInterval())
+			{
+				timeWasted++;
+			}
 		}
 	}
 }
 
-Car* Game::NextCarToCharge()
+// A bit inacurate...
+bool Game::IsNextInterval()
+{
+	SYSTEMTIME time;
+	GetSystemTime(&time);
+	int millis = (time.wSecond * 1000) + time.wMilliseconds;
+	
+	millis /= 10;
+
+	return (millis % 100 == 0);
+}
+
+/*Car* Game::NextCarToCharge()
 {
 	Car* car = nullptr;
 
@@ -56,6 +115,46 @@ Car* Game::NextCarToCharge()
 	}
 
 	return car;
+}*/
+
+Car* Game::NextCarToCharge()
+{
+	// Cars that have waited for too long are our highest priority.
+	if (currentCar && currentCar->GetWaitTime() > maxWaitTime)
+	{
+		return currentCar;
+	}
+
+	// Only swap if the car has been charging too long (temporary).
+	//if (!currentCar || currentCar->GetChargeTime() > 500)
+	{
+
+		iterator = cars.begin();
+
+		// Go through all cars:
+		for (iterator; iterator != cars.end(); iterator++)
+		{
+			// Ignore the current car. Don't count cars that aren't waiting.
+			if ( iterator->first == currentCar ||
+				!iterator->first->GetChargeMe() ) continue;
+
+			// For starters, stop charging.
+			if (currentCar) currentCar->StopCharge();
+
+			// If we don't have a current car, give us one.
+			currentCar = iterator->first;
+
+			// If a car has exceeded the wait time, switch.
+			if (iterator->first && iterator->first->GetWaitTime() >= maxWaitTime)
+			{
+				currentCar = iterator->first;
+				return currentCar;
+			}
+		}
+
+	}
+
+	return currentCar;
 }
 
 Game::~Game()

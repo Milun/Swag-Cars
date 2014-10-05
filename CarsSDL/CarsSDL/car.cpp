@@ -23,18 +23,42 @@ Car::Car(int _x)
 void Car::Update()
 {
 	// Drain battery
-	if (chargeCurrent > 0.0 && !chargeMe)
+	if (mode == 'n' && chargeCurrent > 0.0)
 	{
+		y = 0;
 		chargeCurrent -= chargeUse;
-		if (chargeCurrent < 0.0) chargeCurrent = 0.0;
-	}
-	else
-	{
-		if (!chargeMe)
+
+		if (chargeCurrent <= 0.0)
 		{
-			chargeMe = true;
-			y = 180;
-			return;
+			chargeCurrent = 0.0;
+			mode = 'w';
+		}
+	}
+	
+	if (mode == 'w')
+	{
+		if (chargeCurrent >= chargeMax)
+		{
+			mode = 'n';
+		}
+
+		y = 180;
+		waitTime++;
+	}
+
+	if (mode == 'c')
+	{
+		chargeCurrent += chargeRate;
+		chargeTime++;
+		y = 400;
+
+		if (chargeCurrent >= chargeMax)
+		{
+			mode = 'n';
+
+			chargeTime = 0;
+			chargeCurrent = chargeMax;
+			waitTime = 0;
 		}
 	}
 }
@@ -46,8 +70,11 @@ void Car::Draw()
 	sprite->Draw(x, y);
 	text->Draw(x+20, y+10, "Charge: " + std::to_string(((int)chargeCurrent)) + "%");
 	text->Draw(x+20, y+30, "Max: " + std::to_string((int)(chargeMax)) + "kWh");
-	text->Draw(x+20, y+70, "Rate: " + std::to_string((int)(chargeRate*100.0f)) + "pf");
-	text->Draw(x+20, y+90, "Use: " + std::to_string((int)(chargeUse*100.0f)) + "pf");
+	text->Draw(x+20, y+50, "Wait: " + std::to_string((int)(waitTime)));
+
+	text->Draw(x+20, y+90, "Rate: " + std::to_string((int)(chargeRate*100.0f)) + "pf");
+	text->Draw(x+20, y+180, "Rate: " + std::to_string(mode));
+	text->Draw(x+20, y+110, "Use: " + std::to_string((int)(chargeUse*100.0f)) + "pf");
 
 	std::string bar = "";
 	for (unsigned i = 0; i < (int)chargeCurrent; i += 4)
@@ -55,25 +82,19 @@ void Car::Draw()
 		bar += "|";
 	}
 
-	text->Draw(x + 24, y + 120, bar);
+	text->Draw(x + 24, y + 140, bar);
+}
+
+void Car::StopCharge()
+{
+	mode = 'w';
 }
 
 bool Car::Charge()
 {
-	chargeCurrent += chargeRate;
+	mode = 'c';
 
-	if (chargeCurrent >= chargeMax)
-	{
-		chargeMe = false;
-		y = 0;
-		chargeCurrent = chargeMax;
-		return true;
-	}
-	else
-	{
-		y = 400;
-		return false;
-	}
+	return (chargeCurrent < chargeMax);
 }
 
 Car::~Car()
