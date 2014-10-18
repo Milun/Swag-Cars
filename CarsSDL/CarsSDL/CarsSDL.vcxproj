@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClCompile Include="car.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="graph.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="text.cpp" />
@@ -79,6 +80,7 @@
     <ClInclude Include="car.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="global.h" />
+    <ClInclude Include="graph.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="text.h" />
   </ItemGroup>

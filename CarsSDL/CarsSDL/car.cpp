@@ -14,8 +14,10 @@ Car::Car(int _x)
 
 	x = _x;
 	y = 0;
-	chargeRate = (float)(rand() % 20 + 1) / 100.0f;
-	chargeUse = (float)(rand() % 20 + 1)  / 100.0f;
+	yDraw = 0.0f;
+
+	chargeRate = (float)(rand() % 20 + 6) / 100.0f;
+	chargeUse = (float)(rand() % 20 + 6)  / 100.0f;
 	chargeMax = 100.0;
 	chargeCurrent = chargeMax;
 }
@@ -43,7 +45,8 @@ void Car::Update()
 		}
 
 		y = 180;
-		waitTime++;
+
+		if (NextSecondInterval()) waitTime++;
 	}
 
 	if (mode == 'c')
@@ -61,20 +64,27 @@ void Car::Update()
 			waitTime = 0;
 		}
 	}
+
+	if (yDraw < (float)(y - 1) || yDraw >(float)(y + 1))
+	{
+		yDraw += ((float)y - yDraw) / 10.0f;
+	}
 }
 
 void Car::Draw()
 {
 	Update();
 
-	sprite->Draw(x, y);
-	text->Draw(x+20, y+10, "Charge: " + std::to_string(((int)chargeCurrent)) + "%");
-	text->Draw(x+20, y+30, "Max: " + std::to_string((int)(chargeMax)) + "kWh");
-	text->Draw(x+20, y+50, "Wait: " + std::to_string((int)(waitTime)));
+	int yInt = (int)yDraw;
 
-	text->Draw(x+20, y+90, "Rate: " + std::to_string((int)(chargeRate*100.0f)) + "pf");
-	text->Draw(x+20, y+180, "Rate: " + std::to_string(mode));
-	text->Draw(x+20, y+110, "Use: " + std::to_string((int)(chargeUse*100.0f)) + "pf");
+	sprite->Draw(x, yInt);
+	text->Draw(x + 20, yInt + 10, "Charge: " + std::to_string(((int)chargeCurrent)) + "%");
+	text->Draw(x + 20, yInt + 30, "Max: " + std::to_string((int)(chargeMax)) + "kWh");
+	text->Draw(x + 20, yInt + 50, "Wait: " + SecondsToTime(waitTime));
+
+	text->Draw(x + 20, yInt + 90, "Rate: " + std::to_string((int)(chargeRate*100.0f)) + "pf");
+	text->Draw(x + 20, yInt + 180, "Rate: " + std::to_string(mode));
+	text->Draw(x + 20, yInt + 110, "Use: " + std::to_string((int)(chargeUse*100.0f)) + "pf");
 
 	std::string bar = "";
 	for (unsigned i = 0; i < (int)chargeCurrent; i += 4)

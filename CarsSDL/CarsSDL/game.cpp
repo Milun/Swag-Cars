@@ -1,5 +1,4 @@
 #include "game.h"
-#include <windows.h>
 #include <iostream>
 
 Game::Game()
@@ -11,6 +10,7 @@ Game::Game()
 
 	spr = new Sprite("spr_charge.png");
 	text = new Text("lazy.ttf");
+
 }
 
 void Game::Draw()
@@ -18,7 +18,9 @@ void Game::Draw()
 	spr->Draw(0, 380);
 
 	text->Draw(850, 10, "Profit: $" + ThousandString(std::to_string(profit)) + ".00" );
-	text->Draw(850, 40, "Total waiting time caused: " + std::to_string(timeWasted) + " (+" + std::to_string(noOfWaitingCars) + ") per second");
+	text->Draw(850, 40, "Total waiting time caused: " + SecondsToTime(timeWasted) + " (+" + std::to_string(noOfWaitingCars) + ") per second");
+
+	
 
 	ChargeCars();
 }
@@ -58,6 +60,7 @@ void Game::ChargeCars()
 		else
 		{
 			// Increase profits.
+			if (NextSecondInterval())
 			profit += 1;
 
 			if (currentCar->GetChargeMe() == false)
@@ -80,24 +83,19 @@ void Game::ChargeCars()
 			noOfWaitingCars++;
 
 			// Add to the overall time wasted waiting of all cars.
-			if (IsNextInterval())
+			if (NextSecondInterval())
 			{
 				timeWasted++;
+				waitingSinceLast++;
 			}
 		}
 	}
-}
 
-// A bit inacurate...
-bool Game::IsNextInterval()
-{
-	SYSTEMTIME time;
-	GetSystemTime(&time);
-	int millis = (time.wSecond * 1000) + time.wMilliseconds;
-	
-	millis /= 10;
-
-	return (millis % 100 == 0);
+	if (NextSecondInterval() && gSeconds % 30 == 0)
+	{
+		//UpdateWaitingGraph(waitingSinceLast);
+		waitingSinceLast = 0;
+	}
 }
 
 /*Car* Game::NextCarToCharge()

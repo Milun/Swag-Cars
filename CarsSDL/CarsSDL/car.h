@@ -10,11 +10,12 @@ class Car
 private:
 		int id;
 		int x, y;
+		float yDraw;
 
 		char mode = 'n';
 
-		int waitTime = 0;
-		int chargeTime = 0;
+		long int waitTime = 0;
+		long int chargeTime = 0;
 
 		Text* text;
 		Sprite* sprite;

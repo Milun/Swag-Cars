@@ -7,11 +7,15 @@
 
 #include <random>
 #include <time.h>
-
 #include "game.h"
 
 Game *game;
 SDL_Surface *screen;
+bool gSecond = false;
+long int gSeconds = 0;
+long int gLastMilli = 0;
+
+#include "global.h"
 
 bool init()
 {
@@ -55,6 +59,7 @@ int main(int argc, char *argv[])
 	while (!quitGame)
 	{
 		SDL_FillRect(screen, NULL, 0xffffff);
+		CountSeconds();
 
 		// Detect input
 		SDL_Event ev;

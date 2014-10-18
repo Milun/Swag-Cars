@@ -5,6 +5,7 @@
 #include "sprite.h"
 #include "text.h"
 #include "global.h"
+#include "graph.h"
 
 #include <map>
 #include <string>
@@ -18,17 +19,21 @@ private:
 	Sprite *spr;
 	Text *text;
 
+	//Graph *
+
 	typedef std::map<Car*, int>::iterator it_type;
 	it_type iterator = cars.begin();
 
-	int profit = 0;
-	
-	int timeWasted = 0;
+	long int profit = 0;
+
+	long int timeWasted = 0;
+	long int waitingSinceLast = 0;
+
 	int noOfWaitingCars = 0;
 
-	int maxWaitTime = 1000;
+	int maxWaitTime = 30;
 
-	bool IsNextInterval();
+	void UpdateWaitingGraph(int waitingThisInterval);
 
 public:
 	Game();
