@@ -10,15 +10,15 @@ class Text
 private:
 	SDL_Surface *surface = NULL;
 	TTF_Font	*font = NULL;
-	SDL_Color	color;
+	int			size;
 
 	int x, y;
 
 public:
-	Text(std::string fontname);
+	Text(std::string fontname, int size = 16);
 	~Text();
 
-	void Draw(int x, int y, std::string content);
+	void Draw(int x, int y, std::string content, Uint8 r = 0, Uint8 g = 0, Uint8 b = 0);
 };
 
 #endif

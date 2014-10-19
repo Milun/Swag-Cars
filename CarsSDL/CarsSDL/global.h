@@ -7,36 +7,41 @@
 #include <string>
 
 extern SDL_Surface *screen;
-extern bool gSecond;
-extern long int gSeconds;
-extern long int gLastMilli;
 
-inline void CountSeconds()
+extern long int gMillis;
+extern long int gTime;
+extern int gFramesToSeconds;
+
+inline std::string ToTime(int val)
 {
-	gSecond = false;
+	std::string m = std::to_string(val / 60);
+	std::string s = std::to_string(val % 60);
 
-	SYSTEMTIME time;
-	GetSystemTime(&time);
-	int millis = ((time.wSecond * 1000) + time.wMilliseconds)%10000;
+	if (val / 60 < 10) m = "0" + m;
+	if (val % 60 < 10) s = "0" + s;
 
-	if (millis < 100 && gLastMilli > 100) gLastMilli = 0;
+	return  m + ":" + s;
+}
 
-	if (millis >= gLastMilli + 100)
+inline void IncrementTime()
+{
+	gMillis++;
+
+	if (gMillis > gFramesToSeconds)
 	{
-		gLastMilli = millis;
-		gSecond = true;
-		gSeconds++;
+		gTime++;
+		gMillis = 0;
 	}
+}
+
+inline bool NextSecondInterval()
+{
+	return (gMillis == 0);
 }
 
 inline std::string SecondsToTime(int s)
 {
 	return std::to_string(s / 60) + ":" + std::to_string(s % 60);
-}
-
-inline bool NextSecondInterval()
-{
-	return gSecond;
 }
 
 #endif

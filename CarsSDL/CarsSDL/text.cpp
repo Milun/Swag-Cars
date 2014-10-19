@@ -1,16 +1,18 @@
 #include "text.h"
 #include "global.h"
 
-Text::Text(std::string fontname)
+Text::Text(std::string fontname, int size)
 {
-	color.r = 0;
-	color.g = 0;
-	color.b = 0;
-	font = TTF_OpenFont("arial.ttf", 16);
+	font = TTF_OpenFont(fontname.c_str(), size);
 }
 
-void Text::Draw(int x, int y, std::string content)
+void Text::Draw(int x, int y, std::string content, Uint8 r, Uint8 g, Uint8 b)
 {
+	SDL_Color	color;
+	color.r = r;
+	color.g = g;
+	color.b = b;
+
 	SDL_Rect offset;
 	offset.x = x;
 	offset.y = y;

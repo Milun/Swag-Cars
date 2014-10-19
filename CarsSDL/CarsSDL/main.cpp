@@ -11,9 +11,12 @@
 
 Game *game;
 SDL_Surface *screen;
-bool gSecond = false;
-long int gSeconds = 0;
-long int gLastMilli = 0;
+
+long int gMillis = 0;
+long int gTime = 0;
+int gFramesToSeconds = 100;
+
+bool delay = false;
 
 #include "global.h"
 
@@ -50,7 +53,7 @@ int main(int argc, char *argv[])
 	
 	srand(time(NULL));
 
-	SDL_Window* window = SDL_CreateWindow("Font Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1200, 600, SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow("Font Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1200, 800, SDL_WINDOW_SHOWN);
 	screen = SDL_GetWindowSurface(window);
 
 	game = new Game();
@@ -59,7 +62,7 @@ int main(int argc, char *argv[])
 	while (!quitGame)
 	{
 		SDL_FillRect(screen, NULL, 0xffffff);
-		CountSeconds();
+		IncrementTime();
 
 		// Detect input
 		SDL_Event ev;

@@ -9,8 +9,8 @@ Game::Game()
 	}
 
 	spr = new Sprite("spr_charge.png");
-	text = new Text("lazy.ttf");
-
+	text = new Text("lucon.ttf");
+	textTime = new Text("lucon.ttf", 28);
 }
 
 void Game::Draw()
@@ -22,7 +22,78 @@ void Game::Draw()
 
 	
 
+	textTime->Draw(850, 100, ToTime((int)gTime));
+	
+	// Always have an array ready of cars waiting.
+	carsWaiting.clear();
+	for (iterator = cars.begin(); iterator != cars.end(); iterator++)
+	{
+		if (iterator->first->GetChargeMe())
+		{
+			carsWaiting.push_back(iterator->first);
+		}
+	}
+
 	ChargeCars();
+	CalcWaitingTime();
+}
+
+void Game::Sort()
+{
+	carsEarly.clear();
+
+	// Sort cars by waiting time.
+	while (carsWaiting.size() > 0)
+	{
+		int maxChargeTime = -1;
+
+		Car* tmp;
+		for (unsigned i = 0; i < carsWaiting.size(); i++)
+		{
+			if (carsWaiting.at(i)->GetChargeTime() > maxChargeTime)
+			{
+				tmp = carsWaiting.at(i);
+			}
+		}
+
+		carsEarly.push_back(tmp);
+		carsWaiting.erase(find(carsWaiting.begin(), carsWaiting.end(), tmp));
+	}
+
+	/*int k = 0;
+
+	do
+	{
+		for (unsigned i = 0; i < carsWaiting.size; i++)
+		{
+			if (carsWaiting.at(i)->GetChargeTime() > carsWaiting.at(i)->GetDue())
+			{
+				optimal = false;
+				k = i;
+				break;
+			}
+			optimal = true;
+		}
+
+		if (!optimal)
+		{
+			vector<Car*> temp;
+
+			for (unsigned i = 0; i < k; i++)
+			{
+				Car* tmp = carsWaiting.at(i);
+
+				if (tmp->GetChargeTime() > waiting[i + 1].ChargeTime)
+				{
+					waiting[i];
+				}
+			add tmp to late
+				remove tmp from early
+				sort early by due date
+				sort late by due date
+
+		}
+	until optimum = true;*/
 }
 
 std::string Game::ThousandString(std::string pass)
@@ -46,15 +117,24 @@ std::string Game::ThousandString(std::string pass)
 
 void Game::ChargeCars()
 {
-	double max = 0;
+	if (carsWaiting.size() <= 0) return;
+	if (carsEarly.size() <= 0) Sort();
+	if (carsEarly.size() <= 0) return;
 
-	NextCarToCharge();
+	currentCar = carsEarly.at(0);
 
-	if (currentCar != nullptr)
+	if (currentCar != nullptr && carsEarly.size() > 0)
 	{
 		if (!currentCar->Charge())
 		{
 			currentCar->StopCharge();
+
+			carsEarly.erase(find(carsEarly.begin(), carsEarly.end(), currentCar));
+			
+			// Resort the list if you're done.
+			//if (carsEarly.size() <= 0) Sort();
+			//currentCar = carsEarly.at(0);
+
 			currentCar = nullptr;
 		}
 		else
@@ -69,7 +149,10 @@ void Game::ChargeCars()
 			}
 		}
 	}
+}
 
+void Game::CalcWaitingTime()
+{
 	noOfWaitingCars = 0;
 
 	for (iterator = cars.begin(); iterator != cars.end(); iterator++)
@@ -91,12 +174,13 @@ void Game::ChargeCars()
 		}
 	}
 
-	if (NextSecondInterval() && gSeconds % 30 == 0)
+	if (NextSecondInterval() && gTime % 30 == 0)
 	{
 		//UpdateWaitingGraph(waitingSinceLast);
 		waitingSinceLast = 0;
 	}
 }
+
 
 /*Car* Game::NextCarToCharge()
 {
@@ -115,7 +199,7 @@ void Game::ChargeCars()
 	return car;
 }*/
 
-Car* Game::NextCarToCharge()
+/*Car* Game::NextCarToCharge()
 {
 	// Cars that have waited for too long are our highest priority.
 	if (currentCar && currentCar->GetWaitTime() > maxWaitTime)
@@ -153,7 +237,7 @@ Car* Game::NextCarToCharge()
 	}
 
 	return currentCar;
-}
+}*/
 
 Game::~Game()
 {
@@ -163,4 +247,6 @@ Game::~Game()
 	}
 
 	delete spr;
+	delete text;
+	delete textTime;
 }

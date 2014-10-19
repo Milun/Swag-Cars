@@ -12,13 +12,15 @@ private:
 		int x, y;
 		float yDraw;
 
+		int timeDue = 0;
+
 		char mode = 'n';
 
 		long int waitTime = 0;
-		long int chargeTime = 0;
 
 		Text* text;
 		Sprite* sprite;
+		Sprite* spriteBubble;
 
 		double chargeCurrent;
 		double chargeRate;
@@ -38,11 +40,12 @@ public:
 	inline double GetChargeRate() { return chargeRate; };
 
 	inline bool GetChargeMe() { return (mode == 'w'); };
-
 	inline double ChargeLeft() { return chargeMax - chargeCurrent; }
 
 	inline int GetWaitTime() { return waitTime; }
-	inline int GetChargeTime() { return chargeTime; }
+
+	inline int GetChargeTime() { return ((chargeMax - chargeCurrent) / chargeRate) / gFramesToSeconds; }
+	inline int GetDue() { return timeDue; };
 
 	bool Charge();
 	void StopCharge();

@@ -9,6 +9,9 @@
 
 #include <map>
 #include <string>
+#include <vector>
+
+using namespace std;
 
 class Game
 {
@@ -18,6 +21,16 @@ private:
 
 	Sprite *spr;
 	Text *text;
+	Text *textTime;
+
+	vector<Car*> carsWaiting;
+	vector<Car*> carsEarly;
+	vector<Car*> carsLate;
+	bool optimal;
+
+		//early = list of cars
+		//late = list of cars
+		//optimum = boolean
 
 	//Graph *
 
@@ -34,10 +47,13 @@ private:
 	int maxWaitTime = 30;
 
 	void UpdateWaitingGraph(int waitingThisInterval);
+	
+	void Sort();
+	void CalcWaitingTime();
 
 public:
 	Game();
-	Car* NextCarToCharge();
+
 	void ChargeCars();
 	std::string ThousandString(std::string pass);
 	~Game();

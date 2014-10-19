@@ -1,5 +1,6 @@
 #include "car.h"
 
+#include <iostream>
 #include <random>
 
 int Car::count = 0;
@@ -7,8 +8,9 @@ int Car::count = 0;
 Car::Car(int _x)
 {
 	id = count++;
-	text = new Text("lazy.ttf");
+	text = new Text("lucon.ttf", 11);
 	sprite = new Sprite("spr_car.png");
+	spriteBubble = new Sprite("spr_bubble.png");
 
 	chargeMe = false;
 
@@ -27,13 +29,18 @@ void Car::Update()
 	// Drain battery
 	if (mode == 'n' && chargeCurrent > 0.0)
 	{
-		y = 0;
+		y = -200;
 		chargeCurrent -= chargeUse;
 
 		if (chargeCurrent <= 0.0)
 		{
 			chargeCurrent = 0.0;
 			mode = 'w';
+
+			// Set a random time that the car wants to leave.
+			// The time will always be higher than the time required to charge the car.
+			timeDue = gTime + GetChargeTime() + 2 + rand() % 10;
+			std::cout << std::to_string(gTime) + " " + std::to_string(GetChargeTime());
 		}
 	}
 	
@@ -52,14 +59,12 @@ void Car::Update()
 	if (mode == 'c')
 	{
 		chargeCurrent += chargeRate;
-		chargeTime++;
 		y = 400;
 
 		if (chargeCurrent >= chargeMax)
 		{
 			mode = 'n';
 
-			chargeTime = 0;
 			chargeCurrent = chargeMax;
 			waitTime = 0;
 		}
@@ -77,22 +82,41 @@ void Car::Draw()
 
 	int yInt = (int)yDraw;
 
-	sprite->Draw(x, yInt);
-	text->Draw(x + 20, yInt + 10, "Charge: " + std::to_string(((int)chargeCurrent)) + "%");
-	text->Draw(x + 20, yInt + 30, "Max: " + std::to_string((int)(chargeMax)) + "kWh");
-	text->Draw(x + 20, yInt + 50, "Wait: " + SecondsToTime(waitTime));
-
-	text->Draw(x + 20, yInt + 90, "Rate: " + std::to_string((int)(chargeRate*100.0f)) + "pf");
-	text->Draw(x + 20, yInt + 180, "Rate: " + std::to_string(mode));
-	text->Draw(x + 20, yInt + 110, "Use: " + std::to_string((int)(chargeUse*100.0f)) + "pf");
-
-	std::string bar = "";
-	for (unsigned i = 0; i < (int)chargeCurrent; i += 4)
+	if (mode == 'n' && y <= -200)
 	{
-		bar += "|";
+		spriteBubble->Draw(x, 5);
 	}
+	else
+	{
+		sprite->Draw(x, yInt);
 
-	text->Draw(x + 24, y + 140, bar);
+		text->Draw(x + 5, yInt + 10, "Chrg:     " + std::to_string(((int)chargeCurrent)) + "%");
+		text->Draw(x + 5, yInt + 25, "ChrgRate: " + std::to_string((int)(chargeRate*gFramesToSeconds)) + "ps");
+
+		text->Draw(x + 5, yInt + 50, "TimeWait: " + SecondsToTime(waitTime));
+
+		if (timeDue + GetChargeTime() >= gTime) text->Draw(x + 5, yInt + 80, "TimeToCh: " + ToTime(GetChargeTime()), 0, 150, 0);
+		else									text->Draw(x + 5, yInt + 80, "TimeToCh: " + ToTime(GetChargeTime()), 150, 0, 0);
+
+		if (timeDue >= gTime)	text->Draw(x + 5, yInt + 95, "TimeDue:  " + SecondsToTime(timeDue), 0, 225, 0);
+		else					text->Draw(x + 5, yInt + 95, "TimeDue:  " + SecondsToTime(timeDue), 225, 0, 0);
+
+
+		//text->Draw(x + 20, yInt + 30, "Max: " + std::to_string((int)(chargeMax)) + "kWh");
+
+
+
+
+		//text->Draw(x + 20, yInt + 110, "Use: " + std::to_string((int)(chargeUse*100.0f)) + "pf");
+
+		std::string bar = "";
+		for (unsigned i = 0; i < (int)chargeCurrent; i += 10)
+		{
+			bar += "|";
+		}
+
+		text->Draw(x + 24, yInt + 140, bar, 0, 200, 0);
+	}
 }
 
 void Car::StopCharge()
@@ -109,5 +133,7 @@ bool Car::Charge()
 
 Car::~Car()
 {
+	delete sprite;
+	delete spriteBubble;
 	delete text;
 }
