@@ -23,6 +23,8 @@ private:
 	Text *text;
 	Text *textTime;
 
+	SDL_Color	color[10];
+
 	vector<Car*> carsWaiting;
 	vector<Car*> carsEarly;
 	vector<Car*> carsLate;
@@ -50,6 +52,8 @@ private:
 	
 	void Sort();
 	void CalcWaitingTime();
+
+	void DrawSchedule();
 
 public:
 	Game();

@@ -3,14 +3,25 @@
 
 Game::Game()
 {
-	for (unsigned i = 0; i < 6; i++)
-	{
-		cars[new Car(i * 135 + 1)] = 0;
-	}
-
 	spr = new Sprite("spr_charge.png");
 	text = new Text("lucon.ttf");
 	textTime = new Text("lucon.ttf", 28);
+
+	color[0].r = 255; color[0].g = 0; color[0].b = 0;
+	color[1].r = 0; color[1].g = 255; color[1].b = 0;
+	color[2].r = 0; color[2].g = 0; color[2].b = 255;
+	color[3].r = 255; color[3].g = 150; color[3].b = 0;
+	color[4].r = 255; color[4].g = 0; color[4].b = 255;
+	color[5].r = 0; color[5].g = 255; color[5].b = 255;
+	color[6].r = 0; color[6].g = 0; color[6].b = 0;
+	color[7].r = 100; color[7].g = 0; color[7].b = 255;
+	color[8].r = 0; color[8].g = 255; color[8].b = 100;
+	color[9].r = 255; color[9].g = 0; color[9].b = 100;
+
+	for (unsigned i = 0; i < 6; i++)
+	{
+		cars[new Car(i * 135 + 1, color[i])] = 0;
+	}
 }
 
 void Game::Draw()
@@ -24,7 +35,7 @@ void Game::Draw()
 
 	textTime->Draw(850, 100, ToTime((int)gTime));
 	
-	// Always have an array ready of cars waiting.
+	/*// Always have an array ready of cars waiting.
 	carsWaiting.clear();
 	for (iterator = cars.begin(); iterator != cars.end(); iterator++)
 	{
@@ -36,6 +47,18 @@ void Game::Draw()
 
 	ChargeCars();
 	CalcWaitingTime();
+
+	DrawSchedule();*/
+}
+
+void Game::DrawSchedule()
+{
+	for (unsigned i = 0; i < carsEarly.size(); i++)
+	{
+		textTime->Draw(40 + 70 * i, 730, "X", carsEarly.at(i)->GetColor().r, carsEarly.at(i)->GetColor().g, carsEarly.at(i)->GetColor().b);
+		textTime->Draw(42 + 70 * i, 730, "X", carsEarly.at(i)->GetColor().r, carsEarly.at(i)->GetColor().g, carsEarly.at(i)->GetColor().b);
+		textTime->Draw(42 + 70 * i, 729, "X", carsEarly.at(i)->GetColor().r, carsEarly.at(i)->GetColor().g, carsEarly.at(i)->GetColor().b);
+	}
 }
 
 void Game::Sort()

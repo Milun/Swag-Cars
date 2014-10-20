@@ -5,7 +5,7 @@
 
 int Car::count = 0;
 
-Car::Car(int _x)
+Car::Car(int _x, SDL_Color _color)
 {
 	id = count++;
 	text = new Text("lucon.ttf", 11);
@@ -22,6 +22,8 @@ Car::Car(int _x)
 	chargeUse = (float)(rand() % 20 + 6)  / 100.0f;
 	chargeMax = 100.0;
 	chargeCurrent = chargeMax;
+
+	color = _color;
 }
 
 void Car::Update()
@@ -90,7 +92,7 @@ void Car::Draw()
 	{
 		sprite->Draw(x, yInt);
 
-		text->Draw(x + 5, yInt + 10, "Chrg:     " + std::to_string(((int)chargeCurrent)) + "%");
+		/*text->Draw(x + 5, yInt + 10, "Chrg:     " + std::to_string(((int)chargeCurrent)) + "%");
 		text->Draw(x + 5, yInt + 25, "ChrgRate: " + std::to_string((int)(chargeRate*gFramesToSeconds)) + "ps");
 
 		text->Draw(x + 5, yInt + 50, "TimeWait: " + SecondsToTime(waitTime));
@@ -99,23 +101,22 @@ void Car::Draw()
 		else									text->Draw(x + 5, yInt + 80, "TimeToCh: " + ToTime(GetChargeTime()), 150, 0, 0);
 
 		if (timeDue >= gTime)	text->Draw(x + 5, yInt + 95, "TimeDue:  " + SecondsToTime(timeDue), 0, 225, 0);
-		else					text->Draw(x + 5, yInt + 95, "TimeDue:  " + SecondsToTime(timeDue), 225, 0, 0);
+		else					text->Draw(x + 5, yInt + 95, "TimeDue:  " + SecondsToTime(timeDue), 225, 0, 0);*/
 
 
 		//text->Draw(x + 20, yInt + 30, "Max: " + std::to_string((int)(chargeMax)) + "kWh");
-
-
-
-
 		//text->Draw(x + 20, yInt + 110, "Use: " + std::to_string((int)(chargeUse*100.0f)) + "pf");
 
-		std::string bar = "";
+		/*std::string bar = "";
 		for (unsigned i = 0; i < (int)chargeCurrent; i += 10)
 		{
 			bar += "|";
 		}
 
 		text->Draw(x + 24, yInt + 140, bar, 0, 200, 0);
+
+		text->Draw(x + 22, yInt + 160, "XXXXXXXXXXX", color.r, color.g, color.b);
+		text->Draw(x + 22, yInt + 167, "XXXXXXXXXXX", color.r, color.g, color.b);*/
 	}
 }
 

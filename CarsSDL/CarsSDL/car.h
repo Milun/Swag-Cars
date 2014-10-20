@@ -18,6 +18,8 @@ private:
 
 		long int waitTime = 0;
 
+		SDL_Color	color;
+
 		Text* text;
 		Sprite* sprite;
 		Sprite* spriteBubble;
@@ -33,7 +35,7 @@ private:
 public:
 	static int count; //How many cars there are
 
-	Car(int _x);
+	Car(int _x, SDL_Color _color);
 	~Car();
 
 	inline double GetChargeCurrent() { return chargeCurrent; };
@@ -46,6 +48,8 @@ public:
 
 	inline int GetChargeTime() { return ((chargeMax - chargeCurrent) / chargeRate) / gFramesToSeconds; }
 	inline int GetDue() { return timeDue; };
+
+	inline SDL_Color GetColor() { return color; };
 
 	bool Charge();
 	void StopCharge();
