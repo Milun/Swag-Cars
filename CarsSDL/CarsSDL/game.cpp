@@ -35,7 +35,7 @@ void Game::Draw()
 
 	textTime->Draw(850, 100, ToTime((int)gTime));
 	
-	/*// Always have an array ready of cars waiting.
+	// Always have an array ready of cars waiting.
 	carsWaiting.clear();
 	for (iterator = cars.begin(); iterator != cars.end(); iterator++)
 	{
@@ -48,75 +48,100 @@ void Game::Draw()
 	ChargeCars();
 	CalcWaitingTime();
 
-	DrawSchedule();*/
+	DrawSchedule();
 }
 
 void Game::DrawSchedule()
 {
-	for (unsigned i = 0; i < carsEarly.size(); i++)
+	for (unsigned i = 0; i < carsByDue.size(); i++)
 	{
-		textTime->Draw(40 + 70 * i, 730, "X", carsEarly.at(i)->GetColor().r, carsEarly.at(i)->GetColor().g, carsEarly.at(i)->GetColor().b);
-		textTime->Draw(42 + 70 * i, 730, "X", carsEarly.at(i)->GetColor().r, carsEarly.at(i)->GetColor().g, carsEarly.at(i)->GetColor().b);
-		textTime->Draw(42 + 70 * i, 729, "X", carsEarly.at(i)->GetColor().r, carsEarly.at(i)->GetColor().g, carsEarly.at(i)->GetColor().b);
+		textTime->Draw(40 + 70 * i, 710, "X", carsByDue.at(i)->GetColor().r, carsByDue.at(i)->GetColor().g, carsByDue.at(i)->GetColor().b);
+		textTime->Draw(42 + 70 * i, 710, "X", carsByDue.at(i)->GetColor().r, carsByDue.at(i)->GetColor().g, carsByDue.at(i)->GetColor().b);
+		textTime->Draw(42 + 70 * i, 709, "X", carsByDue.at(i)->GetColor().r, carsByDue.at(i)->GetColor().g, carsByDue.at(i)->GetColor().b);
+	}
+
+	for (unsigned i = 0; i < carsFinal.size(); i++)
+	{
+		textTime->Draw(40 + 70 * i, 750, "X", carsFinal.at(i)->GetColor().r, carsFinal.at(i)->GetColor().g, carsFinal.at(i)->GetColor().b);
+		textTime->Draw(42 + 70 * i, 750, "X", carsFinal.at(i)->GetColor().r, carsFinal.at(i)->GetColor().g, carsFinal.at(i)->GetColor().b);
+		textTime->Draw(42 + 70 * i, 749, "X", carsFinal.at(i)->GetColor().r, carsFinal.at(i)->GetColor().g, carsFinal.at(i)->GetColor().b);
 	}
 }
 
 void Game::Sort()
 {
-	carsEarly.clear();
+	// Clear the lists for a new sort.
+	carsByDue.clear();
+	carsLate.clear();
+	carsFinal.clear();
 
-	// Sort cars by waiting time.
+	// Sort cars by the time they are due.
 	while (carsWaiting.size() > 0)
 	{
-		int maxChargeTime = -1;
+		long int minDueTime = 9999999;
 
 		Car* tmp;
 		for (unsigned i = 0; i < carsWaiting.size(); i++)
 		{
-			if (carsWaiting.at(i)->GetChargeTime() > maxChargeTime)
+			if (carsWaiting.at(i)->GetDueTime() < minDueTime)
 			{
+				minDueTime = carsWaiting.at(i)->GetDueTime();
 				tmp = carsWaiting.at(i);
 			}
 		}
 
-		carsEarly.push_back(tmp);
+		carsByDue.push_back(tmp);
 		carsWaiting.erase(find(carsWaiting.begin(), carsWaiting.end(), tmp));
 	}
 
-	/*int k = 0;
-
-	do
+	// Now, go through the sorted cars and find the first car that will be late.
+	bool optimal = false;
+	while (!optimal)
 	{
-		for (unsigned i = 0; i < carsWaiting.size; i++)
+		long int addTime = 0;
+
+		// Find the first car which will be late.
+		for (unsigned i = 0; i < carsByDue.size(); i++)
 		{
-			if (carsWaiting.at(i)->GetChargeTime() > carsWaiting.at(i)->GetDue())
+			addTime += carsByDue.at(i)->GetChargeTime();
+
+			// If this car will be late...
+			if (addTime > carsByDue.at(i)->GetDueTime())
 			{
-				optimal = false;
-				k = i;
+				long int maxChargeTime = -1;
+				Car* temp = nullptr;
+
+				for (unsigned j = 0; j < i; j++)
+				{
+					if (carsByDue.at(j)->GetChargeTime() > maxChargeTime)
+					{
+						temp = carsByDue.at(j);
+						maxChargeTime = temp->GetChargeTime();
+					}
+				}
+
+				// Remove the longest task and put it into another list.
+				if (temp)
+				{
+					carsLate.push_back(temp);
+					carsByDue.erase(find(carsByDue.begin(), carsByDue.end(), temp));
+				}
+
 				break;
 			}
+
 			optimal = true;
 		}
+	}
 
-		if (!optimal)
-		{
-			vector<Car*> temp;
-
-			for (unsigned i = 0; i < k; i++)
-			{
-				Car* tmp = carsWaiting.at(i);
-
-				if (tmp->GetChargeTime() > waiting[i + 1].ChargeTime)
-				{
-					waiting[i];
-				}
-			add tmp to late
-				remove tmp from early
-				sort early by due date
-				sort late by due date
-
-		}
-	until optimum = true;*/
+	for (unsigned i = 0; i < carsByDue.size(); i++)
+	{
+		carsFinal.push_back(carsByDue.at(i));
+	}
+	for (unsigned i = 0; i < carsLate.size(); i++)
+	{
+		carsFinal.push_back(carsLate.at(i));
+	}
 }
 
 std::string Game::ThousandString(std::string pass)
@@ -141,18 +166,18 @@ std::string Game::ThousandString(std::string pass)
 void Game::ChargeCars()
 {
 	if (carsWaiting.size() <= 0) return;
-	if (carsEarly.size() <= 0) Sort();
-	if (carsEarly.size() <= 0) return;
+	if (carsFinal.size() <= 0) Sort();
+	if (carsFinal.size() <= 0) return;
 
-	currentCar = carsEarly.at(0);
+	currentCar = carsFinal.at(0);
 
-	if (currentCar != nullptr && carsEarly.size() > 0)
+	if (currentCar != nullptr && carsFinal.size() > 0)
 	{
 		if (!currentCar->Charge())
 		{
 			currentCar->StopCharge();
 
-			carsEarly.erase(find(carsEarly.begin(), carsEarly.end(), currentCar));
+			carsFinal.erase(find(carsFinal.begin(), carsFinal.end(), currentCar));
 			
 			// Resort the list if you're done.
 			//if (carsEarly.size() <= 0) Sort();

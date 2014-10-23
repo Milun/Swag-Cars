@@ -26,9 +26,10 @@ private:
 	SDL_Color	color[10];
 
 	vector<Car*> carsWaiting;
-	vector<Car*> carsEarly;
+	vector<Car*> carsByDue;
 	vector<Car*> carsLate;
-	bool optimal;
+	vector<Car*> carsFinal;
+	//bool optimal;
 
 		//early = list of cars
 		//late = list of cars

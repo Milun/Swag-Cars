@@ -1,9 +1,14 @@
-﻿Build started 20/10/2014 11:46:32 AM.
+﻿Build started 24/10/2014 12:52:43 AM.
      1>Project "C:\Users\milton\Documents\Swag-Cars\CarsSDL\CarsSDL\CarsSDL.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt game.cpp
-         game.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt car.cpp main.cpp
+         main.cpp
      1>c:\users\milton\documents\swag-cars\carssdl\carssdl\car.h(49): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\main.cpp(54): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+         car.cpp
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\car.h(49): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\car.cpp(112): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\milton\Documents\Swag-Cars\CarsSDL\Debug\CarsSDL.exe" /INCREMENTAL /NOLOGO SDL2.lib SDL2main.lib SDL2_ttf.lib SDL2_image.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\milton\Documents\Swag-Cars\CarsSDL\Debug\CarsSDL.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\milton\Documents\Swag-Cars\CarsSDL\Debug\CarsSDL.lib" /MACHINE:X86 Debug\car.obj
          Debug\game.obj
@@ -16,4 +21,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.96
+Time Elapsed 00:00:03.62

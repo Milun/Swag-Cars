@@ -47,7 +47,7 @@ public:
 	inline int GetWaitTime() { return waitTime; }
 
 	inline int GetChargeTime() { return ((chargeMax - chargeCurrent) / chargeRate) / gFramesToSeconds; }
-	inline int GetDue() { return timeDue; };
+	inline int GetDueTime() { return timeDue; };
 
 	inline SDL_Color GetColor() { return color; };
 

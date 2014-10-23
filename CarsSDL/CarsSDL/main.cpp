@@ -70,6 +70,24 @@ int main(int argc, char *argv[])
 		{
 			if (ev.type == SDL_QUIT) // Detect if the X (close) button is pressed.
 				quitGame = true;
+
+			switch (ev.type)
+			{
+			case SDL_QUIT:
+				quitGame = true;
+				break;
+
+			case SDL_KEYDOWN:
+				printf("Key press detected\n");
+				break;
+
+			case SDL_KEYUP:
+				printf("Key release detected\n");
+				break;
+
+			default:
+				break;
+			}
 		}
 
 		game->Draw();
