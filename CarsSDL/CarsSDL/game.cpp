@@ -4,6 +4,8 @@
 Game::Game()
 {
 	spr = new Sprite("spr_charge.png");
+	sprBar = new Sprite("spr_bar.png");
+
 	text = new Text("lucon.ttf");
 	textTime = new Text("lucon.ttf", 28);
 
@@ -20,13 +22,15 @@ Game::Game()
 
 	for (unsigned i = 0; i < 6; i++)
 	{
-		cars[new Car(i * 135 + 1, color[i])] = 0;
+		cars.push_back(new Car(	i * 135 + 1,
+						"spr_car_" + std::to_string(i) + ".png",
+						"spr_icon_" + std::to_string(i) + ".png"));
 	}
 }
 
 void Game::Draw()
 {
-	spr->Draw(0, 380);
+	spr->Draw(0, 220);
 
 	text->Draw(850, 10, "Profit: $" + ThousandString(std::to_string(profit)) + ".00" );
 	text->Draw(850, 40, "Total waiting time caused: " + SecondsToTime(timeWasted) + " (+" + std::to_string(noOfWaitingCars) + ") per second");
@@ -37,11 +41,11 @@ void Game::Draw()
 	
 	// Always have an array ready of cars waiting.
 	carsWaiting.clear();
-	for (iterator = cars.begin(); iterator != cars.end(); iterator++)
+	for (unsigned i = 0; i < cars.size(); i++)
 	{
-		if (iterator->first->GetChargeMe())
+		if (cars.at(i)->GetChargeMe())
 		{
-			carsWaiting.push_back(iterator->first);
+			carsWaiting.push_back(cars.at(i));
 		}
 	}
 
@@ -53,19 +57,34 @@ void Game::Draw()
 
 void Game::DrawSchedule()
 {
+	float multi = 620.0f / ((float)finishTime);
+	float offset = 0;
+
+	float barOffset = gTime - startTime;
+
+	// Draw text to show it.
+	textTime->Draw(10, 470, "By Due:");
 	for (unsigned i = 0; i < carsByDue.size(); i++)
 	{
-		textTime->Draw(40 + 70 * i, 710, "X", carsByDue.at(i)->GetColor().r, carsByDue.at(i)->GetColor().g, carsByDue.at(i)->GetColor().b);
-		textTime->Draw(42 + 70 * i, 710, "X", carsByDue.at(i)->GetColor().r, carsByDue.at(i)->GetColor().g, carsByDue.at(i)->GetColor().b);
-		textTime->Draw(42 + 70 * i, 709, "X", carsByDue.at(i)->GetColor().r, carsByDue.at(i)->GetColor().g, carsByDue.at(i)->GetColor().b);
+		// RYAN! We need to draw a rectangle
+		// from:	140 + (offset)*multi
+		// to:		140 + (offset + carsByDue.at(i)->GetMaxChargeTime())*multi
+
+		carsByDue.at(i)->GetIcon()->Draw(180 + (offset + carsByDue.at(i)->GetMaxChargeTime())*multi - 49, 450);
+		offset += carsByDue.at(i)->GetMaxChargeTime();
 	}
 
-	for (unsigned i = 0; i < carsFinal.size(); i++)
+	offset = 0;
+
+	// Draw text to show it.
+	textTime->Draw(10, 570, "Hodgson's:");
+	for (unsigned i = 0; i < carsFinalDraw.size(); i++)
 	{
-		textTime->Draw(40 + 70 * i, 750, "X", carsFinal.at(i)->GetColor().r, carsFinal.at(i)->GetColor().g, carsFinal.at(i)->GetColor().b);
-		textTime->Draw(42 + 70 * i, 750, "X", carsFinal.at(i)->GetColor().r, carsFinal.at(i)->GetColor().g, carsFinal.at(i)->GetColor().b);
-		textTime->Draw(42 + 70 * i, 749, "X", carsFinal.at(i)->GetColor().r, carsFinal.at(i)->GetColor().g, carsFinal.at(i)->GetColor().b);
+		carsFinalDraw.at(i)->GetIcon()->Draw(180 + (offset + carsFinalDraw.at(i)->GetMaxChargeTime())*multi - 49, 550);
+		offset += carsFinalDraw.at(i)->GetMaxChargeTime();
 	}
+
+	sprBar->Draw(180 + barOffset*multi, 446);
 }
 
 void Game::Sort()
@@ -74,6 +93,21 @@ void Game::Sort()
 	carsByDue.clear();
 	carsLate.clear();
 	carsFinal.clear();
+	carsFinalDraw.clear();
+
+	finishTime = 0;
+	startTime = gTime;
+
+	// Get the total amount of time this will all charge for.
+	for (unsigned i = 0; i < carsWaiting.size(); i++)
+	{
+		finishTime += carsWaiting.at(i)->GetMaxChargeTime();
+
+		printf((std::to_string(carsWaiting.at(i)->GetMaxChargeTime()) + " + ").c_str());
+		cout << "\n";
+	}
+
+	printf(("Hey: " + std::to_string(finishTime) + "  \n").c_str());
 
 	// Sort cars by the time they are due.
 	while (carsWaiting.size() > 0)
@@ -96,26 +130,27 @@ void Game::Sort()
 
 	// Now, go through the sorted cars and find the first car that will be late.
 	bool optimal = false;
+	vector<Car*> carsByDueTemp = carsByDue;
 	while (!optimal)
 	{
-		long int addTime = 0;
+		long float addTime = 0;
 
 		// Find the first car which will be late.
-		for (unsigned i = 0; i < carsByDue.size(); i++)
+		for (unsigned i = 0; i < carsByDueTemp.size(); i++)
 		{
-			addTime += carsByDue.at(i)->GetChargeTime();
+			addTime += carsByDueTemp.at(i)->GetChargeTime();
 
 			// If this car will be late...
-			if (addTime > carsByDue.at(i)->GetDueTime())
+			if (addTime > carsByDueTemp.at(i)->GetDueTime())
 			{
-				long int maxChargeTime = -1;
+				long float maxChargeTime = -1;
 				Car* temp = nullptr;
 
 				for (unsigned j = 0; j < i; j++)
 				{
-					if (carsByDue.at(j)->GetChargeTime() > maxChargeTime)
+					if (carsByDueTemp.at(j)->GetChargeTime() > maxChargeTime)
 					{
-						temp = carsByDue.at(j);
+						temp = carsByDueTemp.at(j);
 						maxChargeTime = temp->GetChargeTime();
 					}
 				}
@@ -124,7 +159,7 @@ void Game::Sort()
 				if (temp)
 				{
 					carsLate.push_back(temp);
-					carsByDue.erase(find(carsByDue.begin(), carsByDue.end(), temp));
+					carsByDueTemp.erase(find(carsByDueTemp.begin(), carsByDueTemp.end(), temp));
 				}
 
 				break;
@@ -134,13 +169,15 @@ void Game::Sort()
 		}
 	}
 
-	for (unsigned i = 0; i < carsByDue.size(); i++)
+	for (unsigned i = 0; i < carsByDueTemp.size(); i++)
 	{
-		carsFinal.push_back(carsByDue.at(i));
+		carsFinal.push_back(carsByDueTemp.at(i));
+		carsFinalDraw.push_back(carsByDueTemp.at(i));
 	}
 	for (unsigned i = 0; i < carsLate.size(); i++)
 	{
 		carsFinal.push_back(carsLate.at(i));
+		carsFinalDraw.push_back(carsByDueTemp.at(i));
 	}
 }
 
@@ -191,10 +228,10 @@ void Game::ChargeCars()
 			if (NextSecondInterval())
 			profit += 1;
 
-			if (currentCar->GetChargeMe() == false)
+			/*if (currentCar->GetChargeMe() == false)
 			{
 				cars[currentCar] = 0;
-			}
+			}*/
 		}
 	}
 }
@@ -203,14 +240,13 @@ void Game::CalcWaitingTime()
 {
 	noOfWaitingCars = 0;
 
-	for (iterator = cars.begin(); iterator != cars.end(); iterator++)
+	for (unsigned i = 0; i < cars.size(); i++)
 	{
-		iterator->first->Draw();
+		cars.at(i)->Draw();
 
 		// Cars that are charging do not count as "waiting" (their time is not being wasted afterall).
-		if (iterator->first->GetChargeMe())
+		if (cars.at(i)->GetChargeMe())
 		{
-			iterator->second++;
 			noOfWaitingCars++;
 
 			// Add to the overall time wasted waiting of all cars.
@@ -289,12 +325,13 @@ void Game::CalcWaitingTime()
 
 Game::~Game()
 {
-	for (iterator; iterator != cars.end(); iterator++)
+	for (unsigned i = 0; i < cars.size(); i++)
 	{
-		delete iterator->first;
+		delete cars.at(i);
 	}
 
 	delete spr;
+	delete sprBar;
 	delete text;
 	delete textTime;
 }

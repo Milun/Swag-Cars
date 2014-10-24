@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 		game->Draw();
 
 		SDL_UpdateWindowSurface(window);
-		SDL_Delay(1);
+		SDL_Delay(0);
 	}
 
 	//Quit SDL

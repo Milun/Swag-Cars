@@ -1,9 +1,12 @@
 #ifndef CAR_H
 #define CAR_H
 
+#include <string>
+
 #include "global.h"
 #include "text.h"
 #include "sprite.h"
+#include <math.h>
 
 class Car
 {
@@ -18,10 +21,9 @@ private:
 
 		long int waitTime = 0;
 
-		SDL_Color	color;
-
 		Text* text;
 		Sprite* sprite;
+		Sprite* spriteIcon;
 		Sprite* spriteBubble;
 
 		double chargeCurrent;
@@ -35,7 +37,7 @@ private:
 public:
 	static int count; //How many cars there are
 
-	Car(int _x, SDL_Color _color);
+	Car(int _x, std::string _sprite, std::string _icon);
 	~Car();
 
 	inline double GetChargeCurrent() { return chargeCurrent; };
@@ -46,10 +48,12 @@ public:
 
 	inline int GetWaitTime() { return waitTime; }
 
-	inline int GetChargeTime() { return ((chargeMax - chargeCurrent) / chargeRate) / gFramesToSeconds; }
+	inline float GetChargeTime() { return ((((float)chargeMax - ((float)chargeMax)) / ((float)chargeRate)) / (float)gFramesToSeconds); }
+	inline float GetMaxChargeTime() { return ((((float)chargeMax) / ((float)chargeRate)) / (float)gFramesToSeconds); }
+
 	inline int GetDueTime() { return timeDue; };
 
-	inline SDL_Color GetColor() { return color; };
+	inline Sprite* GetIcon() { return spriteIcon; };
 
 	bool Charge();
 	void StopCharge();

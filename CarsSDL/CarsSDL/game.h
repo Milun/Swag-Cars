@@ -16,19 +16,25 @@ using namespace std;
 class Game
 {
 private:
-	std::map<Car*,int> cars; //Each car and how long it has been waiting
 	Car* currentCar = nullptr;
 
 	Sprite *spr;
+	Sprite *sprBar;
 	Text *text;
 	Text *textTime;
 
 	SDL_Color	color[10];
 
+	vector<Car*> cars; //Each car and how long it has been waiting
 	vector<Car*> carsWaiting;
 	vector<Car*> carsByDue;
 	vector<Car*> carsLate;
 	vector<Car*> carsFinal;
+	vector<Car*> carsFinalDraw;
+
+	float startTime = 0;
+	float finishTime = 0;
+
 	//bool optimal;
 
 		//early = list of cars
@@ -36,9 +42,6 @@ private:
 		//optimum = boolean
 
 	//Graph *
-
-	typedef std::map<Car*, int>::iterator it_type;
-	it_type iterator = cars.begin();
 
 	long int profit = 0;
 

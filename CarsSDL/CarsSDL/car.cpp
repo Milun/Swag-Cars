@@ -2,15 +2,17 @@
 
 #include <iostream>
 #include <random>
-#include <string>
 
 int Car::count = 0;
 
-Car::Car(int _x, SDL_Color _color)
+Car::Car(int _x, std::string _sprite, std::string _icon)
 {
 	id = count++;
 	text = new Text("lucon.ttf", 11);
-	sprite = new Sprite("spr_car.png");
+
+	sprite = new Sprite(_sprite);
+	spriteIcon = new Sprite(_icon);
+
 	spriteBubble = new Sprite("spr_bubble.png");
 
 	chargeMe = false;
@@ -19,12 +21,10 @@ Car::Car(int _x, SDL_Color _color)
 	y = 0;
 	yDraw = 0.0f;
 
-	chargeRate = (float)(rand() % 20 + 6) / 70.0f;
-	chargeUse = (float)(rand() % 20 + 6)  / 100.0f;
+	chargeRate = (float)(rand() % 60 + 6) / 120.0f;
+	chargeUse = (float)(/*rand() %*/ 20 + 6)  / 100.0f;
 	chargeMax = 100.0;
 	chargeCurrent = chargeMax;
-
-	color = _color;
 }
 
 void Car::Update()
@@ -43,7 +43,6 @@ void Car::Update()
 			// Set a random time that the car wants to leave.
 			// The time will always be higher than the time required to charge the car.
 			timeDue = gTime + GetChargeTime() + 2 + rand() % 10;
-			std::cout << std::to_string(gTime) + " " + std::to_string(GetChargeTime());
 		}
 	}
 	
@@ -54,7 +53,7 @@ void Car::Update()
 			mode = 'n';
 		}
 
-		y = 180;
+		y = 15;
 
 		if (NextSecondInterval()) waitTime++;
 	}
@@ -62,7 +61,7 @@ void Car::Update()
 	if (mode == 'c')
 	{
 		chargeCurrent += chargeRate;
-		y = 400;
+		y = 230;
 
 		if (chargeCurrent >= chargeMax)
 		{
@@ -115,9 +114,6 @@ void Car::Draw()
 		}
 
 		text->Draw(x + 24, yInt + 140, bar, 0, 200, 0);
-
-		text->Draw(x + 22, yInt + 160, "XXXXXXXXXXX", color.r, color.g, color.b);
-		text->Draw(x + 22, yInt + 167, "XXXXXXXXXXX", color.r, color.g, color.b);
 	}
 }
 
@@ -136,6 +132,7 @@ bool Car::Charge()
 Car::~Car()
 {
 	delete sprite;
+	delete spriteIcon;
 	delete spriteBubble;
 	delete text;
 }
