@@ -32,8 +32,8 @@ private:
 	vector<Car*> carsFinal;
 	vector<Car*> carsFinalDraw;
 
-	float startTime = 0;
-	float finishTime = 0;
+	double startTime = 0;
+	double finishTime = 0;
 
 	//bool optimal;
 
@@ -45,12 +45,12 @@ private:
 
 	long int profit = 0;
 
-	long int timeWasted = 0;
-	long int waitingSinceLast = 0;
+	long double timeWasted = 0;
+	long double waitingSinceLast = 0;
 
 	int noOfWaitingCars = 0;
 
-	int maxWaitTime = 30;
+	double maxWaitTime = 30;
 
 	void UpdateWaitingGraph(int waitingThisInterval);
 	

@@ -57,10 +57,10 @@ void Game::Draw()
 
 void Game::DrawSchedule()
 {
-	float multi = 620.0f / ((float)finishTime);
-	float offset = 0;
+	double multi = 620.0f / ((double)finishTime);
+	double offset = 0;
 
-	float barOffset = gTime - startTime;
+	double barOffset = GetTimeDouble() - (double)startTime;
 
 	// Draw text to show it.
 	textTime->Draw(10, 470, "By Due:");
@@ -84,7 +84,7 @@ void Game::DrawSchedule()
 		offset += carsFinalDraw.at(i)->GetMaxChargeTime();
 	}
 
-	sprBar->Draw(180 + barOffset*multi, 446);
+	sprBar->Draw(160 + barOffset*multi, 446);
 }
 
 void Game::Sort()
@@ -112,7 +112,7 @@ void Game::Sort()
 	// Sort cars by the time they are due.
 	while (carsWaiting.size() > 0)
 	{
-		long int minDueTime = 9999999;
+		long double minDueTime = 9999999;
 
 		Car* tmp;
 		for (unsigned i = 0; i < carsWaiting.size(); i++)

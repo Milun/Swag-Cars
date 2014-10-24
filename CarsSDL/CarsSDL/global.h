@@ -43,6 +43,11 @@ inline std::string ToTime(int val)
 	return  m + ":" + s;
 }
 
+inline double GetTimeDouble()
+{
+	return (double)gTime + (double)gMillis / (double)gFramesToSeconds;
+}
+
 inline void IncrementTime()
 {
 	gMillis++;
