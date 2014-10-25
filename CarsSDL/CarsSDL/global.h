@@ -12,8 +12,9 @@ extern long int gMillis;
 extern long int gTime;
 extern int gFramesToSeconds;
 
-/*SDL_Surface *surfaceRect;
+/*SDL_Surface *surfaceRect;*/
 
+/*
 inline void DrawSquare(int x1, int y1, int x2, int y2)
 {
 	SDL_Rect r;
@@ -31,6 +32,18 @@ inline void DrawSquare(int x1, int y1, int x2, int y2)
 	// Render the rect to the screen
 	SDL_RenderPresent(renderer);
 }*/
+
+inline void DrawRect(SDL_Surface* to, int posX, int posY, int width, int height, Uint8 r, Uint8 g, Uint8 b)
+{
+	SDL_Rect rect;
+	rect.x = posX;
+	rect.y = posY;
+	rect.w = width;
+	rect.h = height;
+	
+
+	SDL_FillRect(to, &rect, SDL_MapRGB(to->format, r, g, b));
+}
 
 inline std::string ToTime(int val)
 {
