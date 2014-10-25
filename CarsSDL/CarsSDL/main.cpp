@@ -18,6 +18,11 @@ int gFramesToSeconds = 100;
 
 bool delay = false;
 
+//Mouse info
+bool clickedThisFrame;
+int clickPosX, clickPosY;
+//End mouse info
+
 #include "global.h"
 
 bool init()
@@ -61,6 +66,8 @@ int main(int argc, char *argv[])
 
 	while (!quitGame)
 	{
+		clickedThisFrame = false;
+
 		SDL_FillRect(screen, NULL, 0xffffff);
 		IncrementTime();
 
@@ -83,6 +90,12 @@ int main(int argc, char *argv[])
 
 			case SDL_KEYUP:
 				printf("Key release detected\n");
+				break;
+			
+			case SDL_MOUSEBUTTONDOWN:
+				clickedThisFrame = true;
+				clickPosX = ev.motion.x;
+				clickPosY = ev.motion.y;
 				break;
 
 			default:
