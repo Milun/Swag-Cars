@@ -61,6 +61,7 @@ private:
 
 public:
 	Game();
+	Game(int numCars);
 
 	void ChargeCars();
 	std::string ThousandString(std::string pass);

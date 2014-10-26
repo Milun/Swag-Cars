@@ -19,6 +19,9 @@ int gFramesToSeconds = 100;
 bool delay = false;
 
 #include "global.h"
+#include "button.h"
+
+double GetValueFromMenu(int startX, int startY, int xGap, int yGap);
 
 bool init()
 {
@@ -58,6 +61,13 @@ int main(int argc, char *argv[])
 
 	game = new Game();
 	bool quitGame = false;
+
+	//Car Menu
+	//MILTON you can then pass these values into Game or whatever class will assign them to the cars
+	//Might also want to write what you're setting so the user knows whats going on
+	double chargeRate = GetValueFromMenu(0, 0, 50, 50);
+	double chargeMax = GetValueFromMenu(0, 0, 50, 50);
+	double chargeUse = GetValueFromMenu(0, 0, 50, 50);
 
 	while (!quitGame)
 	{
@@ -112,4 +122,37 @@ int main(int argc, char *argv[])
 	SDL_Quit();
 
 	return 0;
+}
+
+double GetValueFromMenu(int startX, int startY, int xGap, int yGap)
+{
+	//Custom car menu
+	Sprite*	increaseSprite = new Sprite("increseButton.png");
+	Button* increase = new Button(startX + xGap, startY, 10, 10, increaseSprite);
+
+	Sprite* decreaseSprite = new Sprite("decreaseButton.png");
+	Button* decrease = new Button(startX, startY, 10, 10, decreaseSprite);
+
+	Sprite*	acceptSprite = new Sprite("acceptButton.png");
+	Button* accept = new Button(startX + (xGap/2), startY + yGap, 10, 10, acceptSprite);
+
+	bool set = false;
+	double value = 0; //value is what will be given to the car
+	while (set == false)
+	{
+		if (increase->ClickedOnThisFrame())
+		{
+			value += 1;
+		}
+		else if (decrease->ClickedOnThisFrame())
+		{
+			value -= 1;
+		}
+		else if (accept->ClickedOnThisFrame())
+		{
+			set = true;
+		}
+	}
+
+	return value;
 }
