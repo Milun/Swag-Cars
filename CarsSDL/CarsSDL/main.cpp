@@ -18,11 +18,6 @@ int gFramesToSeconds = 100;
 
 bool delay = false;
 
-//Mouse info
-bool clickedThisFrame;
-int clickPosX, clickPosY;
-//End mouse info
-
 #include "global.h"
 
 bool init()

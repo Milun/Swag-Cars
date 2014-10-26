@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="button.cpp" />
     <ClCompile Include="car.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="graph.cpp" />
@@ -77,6 +78,7 @@
     <ClCompile Include="text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="button.h" />
     <ClInclude Include="car.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="global.h" />

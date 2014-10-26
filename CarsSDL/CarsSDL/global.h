@@ -12,6 +12,11 @@ extern long int gMillis;
 extern long int gTime;
 extern int gFramesToSeconds;
 
+//Mouse info
+static bool clickedThisFrame;
+static int clickPosX, clickPosY;
+//End mouse info
+
 /*SDL_Surface *surfaceRect;*/
 
 /*
