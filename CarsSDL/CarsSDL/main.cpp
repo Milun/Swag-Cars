@@ -65,9 +65,9 @@ int main(int argc, char *argv[])
 	//Car Menu
 	//MILTON you can then pass these values into Game or whatever class will assign them to the cars
 	//Might also want to write what you're setting so the user knows whats going on
-	double chargeRate = GetValueFromMenu(0, 0, 50, 50);
-	double chargeMax = GetValueFromMenu(0, 0, 50, 50);
-	double chargeUse = GetValueFromMenu(0, 0, 50, 50);
+	//double chargeRate = GetValueFromMenu(0, 0, 50, 50);
+	//double chargeMax = GetValueFromMenu(0, 0, 50, 50);
+	//double chargeUse = GetValueFromMenu(0, 0, 50, 50);
 
 	while (!quitGame)
 	{
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-double GetValueFromMenu(int startX, int startY, int xGap, int yGap)
+/*double GetValueFromMenu(int startX, int startY, int xGap, int yGap)
 {
 	//Custom car menu
 	Sprite*	increaseSprite = new Sprite("increseButton.png");
@@ -155,4 +155,4 @@ double GetValueFromMenu(int startX, int startY, int xGap, int yGap)
 	}
 
 	return value;
-}
+}*/

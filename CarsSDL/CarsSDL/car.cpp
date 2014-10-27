@@ -17,11 +17,13 @@ Car::Car(int _x, std::string _sprite, std::string _icon)
 
 	chargeMe = false;
 
+	carcolour = _icon;
+
 	x = _x;
 	y = 0;
 	yDraw = 0.0f;
 
-	chargeRate = (float)(rand() % 60 + 6) / 120.0f;
+	chargeRate = (float)(rand() % 4 + 1) * 0.1f;
 	chargeUse = (float)(/*rand() %*/ 20 + 6)  / 100.0f;
 	chargeMax = 100.0;
 	chargeCurrent = chargeMax;
@@ -42,7 +44,7 @@ void Car::Update()
 
 			// Set a random time that the car wants to leave.
 			// The time will always be higher than the time required to charge the car.
-			timeDue = gTime + GetChargeTime() + 2 + rand() % 10;
+			timeDue = gTime + GetChargeTime() + 2 + rand() % 20;
 		}
 	}
 	

@@ -31,10 +31,14 @@ private:
 		double chargeMax;
 		double chargeUse;
 
+		
+
 		bool chargeMe;
 
 		void Update();
 public:
+	std::string carcolour;
+
 	static int count; //How many cars there are
 
 	Car(int _x, std::string _sprite, std::string _icon);
@@ -48,7 +52,7 @@ public:
 
 	inline double GetWaitTime() { return waitTime; }
 
-	inline double GetChargeTime() { return ((chargeMax - chargeMax) / chargeRate) / gFramesToSeconds; }
+	inline double GetChargeTime() { return ((chargeMax - chargeCurrent) / chargeRate) / gFramesToSeconds; }
 	inline double GetMaxChargeTime() { return (chargeMax / chargeRate) / gFramesToSeconds; }
 
 	inline double GetDueTime() { return timeDue; };

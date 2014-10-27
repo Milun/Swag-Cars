@@ -1,20 +1,34 @@
-﻿Build started 26/10/2014 10:42:43 PM.
-     1>Project "C:\Users\Ryan\Documents\GitHub\Swag-Cars\CarsSDL\CarsSDL\CarsSDL.vcxproj" on node 2 (Build target(s)).
+﻿Build started 27/10/2014 10:58:44 AM.
+     1>Project "C:\Users\milton\Documents\Swag-Cars\CarsSDL\CarsSDL\CarsSDL.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
-         main.cpp
-     1>c:\users\ryan\documents\github\swag-cars\carssdl\carssdl\main.cpp(57): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt car.cpp game.cpp
+         game.cpp
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\game.cpp(36): warning C4244: 'argument' : conversion from 'long double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\game.cpp(78): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\game.cpp(89): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\game.cpp(91): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\game.cpp(96): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\game.cpp(145): warning C4215: nonstandard extension used : long float
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\game.cpp(155): warning C4215: nonstandard extension used : long float
+         car.cpp
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\car.cpp(100): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\car.cpp(102): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\car.cpp(103): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\car.cpp(105): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\car.cpp(106): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\milton\documents\swag-cars\carssdl\carssdl\car.cpp(113): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ryan\Documents\GitHub\Swag-Cars\CarsSDL\Debug\CarsSDL.exe" /INCREMENTAL /NOLOGO SDL2.lib SDL2main.lib SDL2_ttf.lib SDL2_image.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Ryan\Documents\GitHub\Swag-Cars\CarsSDL\Debug\CarsSDL.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ryan\Documents\GitHub\Swag-Cars\CarsSDL\Debug\CarsSDL.lib" /MACHINE:X86 Debug\button.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\milton\Documents\Swag-Cars\CarsSDL\Debug\CarsSDL.exe" /INCREMENTAL /NOLOGO SDL2.lib SDL2main.lib SDL2_ttf.lib SDL2_image.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\milton\Documents\Swag-Cars\CarsSDL\Debug\CarsSDL.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\milton\Documents\Swag-Cars\CarsSDL\Debug\CarsSDL.lib" /MACHINE:X86 Debug\button.obj
          Debug\car.obj
          Debug\game.obj
          Debug\graph.obj
          Debug\main.obj
          Debug\sprite.obj
          Debug\text.obj
-         CarsSDL.vcxproj -> C:\Users\Ryan\Documents\GitHub\Swag-Cars\CarsSDL\Debug\CarsSDL.exe
-     1>Done Building Project "C:\Users\Ryan\Documents\GitHub\Swag-Cars\CarsSDL\CarsSDL\CarsSDL.vcxproj" (Build target(s)).
+         CarsSDL.vcxproj -> C:\Users\milton\Documents\Swag-Cars\CarsSDL\Debug\CarsSDL.exe
+     1>Done Building Project "C:\Users\milton\Documents\Swag-Cars\CarsSDL\CarsSDL\CarsSDL.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.35
+Time Elapsed 00:00:02.06

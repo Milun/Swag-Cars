@@ -3,22 +3,6 @@
 
 Game::Game()
 {
-	Game(6);
-}
-
-Game::Game(int numCars)
-{
-	int max = 6;
-
-	if (numCars > max)
-	{
-		numCars = max;
-	}
-	else if (numCars <= 0)
-	{
-		numCars = 1;
-	}
-
 	spr = new Sprite("spr_charge.png");
 	sprBar = new Sprite("spr_bar.png");
 
@@ -36,7 +20,7 @@ Game::Game(int numCars)
 	color[8].r = 0; color[8].g = 255; color[8].b = 100;
 	color[9].r = 255; color[9].g = 0; color[9].b = 100;
 
-	for (unsigned i = 0; i < numCars-1; i++)
+	for (unsigned i = 0; i < 6; i++)
 	{
 		cars.push_back(new Car(i * 135 + 1,
 			"spr_car_" + std::to_string(i) + ".png",
@@ -89,6 +73,8 @@ void Game::DrawSchedule()
 		//MILTON!
 		//My DrawRect function needs to be passed a Surface to draw on, but there's none in this class, not sure what to do
 
+		//DrawRect();
+
 		carsByDue.at(i)->GetIcon()->Draw(180 + (offset + carsByDue.at(i)->GetMaxChargeTime())*multi - 49, 450);
 		offset += carsByDue.at(i)->GetMaxChargeTime();
 	}
@@ -99,7 +85,11 @@ void Game::DrawSchedule()
 	textTime->Draw(10, 570, "Hodgson's:");
 	for (unsigned i = 0; i < carsFinalDraw.size(); i++)
 	{
-		carsFinalDraw.at(i)->GetIcon()->Draw(180 + (offset + carsFinalDraw.at(i)->GetMaxChargeTime())*multi - 49, 550);
+		
+		carsFinalDraw.at(i)->GetIcon()->Draw(180 + (offset + carsFinalDraw.at(i)->GetMaxChargeTime())*multi - 49, 550 + i*2);
+
+		text->Draw(180 + (offset + carsFinalDraw.at(i)->GetMaxChargeTime())*multi - 49, 550 + i * 20 + 100, carsFinalDraw.at(i)->carcolour);
+
 		offset += carsFinalDraw.at(i)->GetMaxChargeTime();
 	}
 
@@ -196,7 +186,7 @@ void Game::Sort()
 	for (unsigned i = 0; i < carsLate.size(); i++)
 	{
 		carsFinal.push_back(carsLate.at(i));
-		carsFinalDraw.push_back(carsByDueTemp.at(i));
+		carsFinalDraw.push_back(carsLate.at(i));
 	}
 }
 
