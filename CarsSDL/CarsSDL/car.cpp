@@ -5,7 +5,7 @@
 
 int Car::count = 0;
 
-Car::Car(int _x, std::string _sprite, std::string _icon)
+Car::Car(int _x, std::string _sprite, std::string _icon, SDL_Color _color)
 {
 	id = count++;
 	text = new Text("lucon.ttf", 11);
@@ -13,9 +13,11 @@ Car::Car(int _x, std::string _sprite, std::string _icon)
 	sprite = new Sprite(_sprite);
 	spriteIcon = new Sprite(_icon);
 
-	spriteBubble = new Sprite("spr_bubble.png");
+	spriteBubble = new Sprite("spr_bubble.bmp");
 
 	chargeMe = false;
+
+	color = _color;
 
 	carcolour = _icon;
 
@@ -82,17 +84,20 @@ void Car::Update()
 
 void Car::Draw()
 {
-	Update();
+	if (!gPause) Update();
 
 	int yInt = (int)yDraw;
 
 	if (mode == 'n' && y <= -200)
 	{
+		DrawRect(x, y, 122, 135, color.r, color.g, color.b);
 		spriteBubble->Draw(x, 5);
 	}
 	else
 	{
-		sprite->Draw(x, yInt);
+		//sprite->Draw(x, yInt);
+		DrawRect(x, yInt, 122, 192, color.r, color.g, color.b);
+
 
 		text->Draw(x + 5, yInt + 10, "Chrg:     " + std::to_string(((int)chargeCurrent)) + "%");
 		text->Draw(x + 5, yInt + 25, "ChrgRate: " + std::to_string((int)(chargeRate*gFramesToSeconds)) + "ps");

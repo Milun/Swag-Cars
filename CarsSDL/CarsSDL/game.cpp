@@ -6,31 +6,36 @@ Game::Game()
 	spr = new Sprite("spr_charge.png");
 	sprBar = new Sprite("spr_bar.png");
 
+	btnPause = new Button(870, 700, 48, 48, "spr_pause.bmp");
+	btnPlay = new Button(820, 700, 48, 48, "spr_play.bmp");
+
 	text = new Text("lucon.ttf");
 	textTime = new Text("lucon.ttf", 28);
 
-	color[0].r = 255; color[0].g = 0; color[0].b = 0;
-	color[1].r = 0; color[1].g = 255; color[1].b = 0;
-	color[2].r = 0; color[2].g = 0; color[2].b = 255;
-	color[3].r = 255; color[3].g = 150; color[3].b = 0;
-	color[4].r = 255; color[4].g = 0; color[4].b = 255;
-	color[5].r = 0; color[5].g = 255; color[5].b = 255;
-	color[6].r = 0; color[6].g = 0; color[6].b = 0;
-	color[7].r = 100; color[7].g = 0; color[7].b = 255;
-	color[8].r = 0; color[8].g = 255; color[8].b = 100;
-	color[9].r = 255; color[9].g = 0; color[9].b = 100;
+	color[0].r = 166; color[0].g = 136; color[0].b = 140;
+	color[1].r = 222; color[1].g = 209; color[1].b = 236;
+	color[2].r = 208; color[2].g = 220; color[2].b = 236;
+	color[3].r = 225; color[3].g = 243; color[3].b = 226;
+	color[4].r = 242; color[4].g = 242; color[4].b = 215;
+	color[5].r = 237; color[5].g = 222; color[5].b = 212;
+	color[6].r = 228; color[6].g = 228; color[6].b = 228;
+	color[7].r = 220; color[7].g = 239; color[7].b = 234;
+	color[8].r = 235; color[8].g = 235; color[8].b = 235;
+	color[9].r = 108; color[9].g = 227; color[9].b = 174;
 
 	for (unsigned i = 0; i < 6; i++)
 	{
 		cars.push_back(new Car(i * 135 + 1,
 			"spr_car_" + std::to_string(i) + ".png",
-			"spr_icon_" + std::to_string(i) + ".png"));
+			"spr_icon_" + std::to_string(i) + ".png", color[i]));
 	}
 }
 
 void Game::Draw()
 {
-	spr->Draw(0, 220);
+	//spr->Draw(0, 220);
+
+	DrawRect(0, 220, 800, 210, 214, 237, 227);
 
 	text->Draw(850, 10, "Profit: $" + ThousandString(std::to_string(profit)) + ".00" );
 	text->Draw(850, 40, "Total waiting time caused: " + SecondsToTime(timeWasted) + " (+" + std::to_string(noOfWaitingCars) + ") per second");
@@ -39,25 +44,49 @@ void Game::Draw()
 
 	textTime->Draw(850, 100, ToTime((int)gTime));
 	
-	// Always have an array ready of cars waiting.
-	carsWaiting.clear();
-	for (unsigned i = 0; i < cars.size(); i++)
+	if (!gPause)
 	{
-		if (cars.at(i)->GetChargeMe())
+		// Always have an array ready of cars waiting.
+		carsWaiting.clear();
+		for (unsigned i = 0; i < cars.size(); i++)
 		{
-			carsWaiting.push_back(cars.at(i));
+			if (cars.at(i)->GetChargeMe())
+			{
+				carsWaiting.push_back(cars.at(i));
+			}
 		}
+
+		ChargeCars();
+		CalcWaitingTime();
 	}
 
-	ChargeCars();
-	CalcWaitingTime();
+	for (unsigned i = 0; i < cars.size(); i++)
+	{
+		cars.at(i)->Draw();
+	}
 
 	DrawSchedule();
+	UpdateButtons();
+
+	text->Draw(810, 470, ToTime((int)dueLateness));
+	text->Draw(810, 490, std::to_string(dueLatenessAmm));
+
+	text->Draw(810, 570, ToTime((int)hodgeLateness));
+	text->Draw(810, 590, std::to_string(hodgeLatenessAmm));
+
+	btnPlay->Draw();
+	btnPause->Draw();
+}
+
+void Game::UpdateButtons()
+{
+	if (btnPause->ClickedOnThisFrame()) gPause = false;
+	if (btnPlay->ClickedOnThisFrame()) gPause = true;
 }
 
 void Game::DrawSchedule()
 {
-	double multi = 620.0f / ((double)finishTime);
+	double multi = 600.0f / ((double)finishTime);
 	double offset = 0;
 
 	double barOffset = GetTimeDouble() - (double)startTime;
@@ -73,10 +102,19 @@ void Game::DrawSchedule()
 		//MILTON!
 		//My DrawRect function needs to be passed a Surface to draw on, but there's none in this class, not sure what to do
 
-		//DrawRect();
+		SDL_Color color = carsByDue.at(i)->GetColor();
+		DrawRect(200 + (offset)*multi + 2, 470, carsByDue.at(i)->GetMaxChargeTime()*multi - 2, 40, color.r, color.g, color.b);
 
-		carsByDue.at(i)->GetIcon()->Draw(180 + (offset + carsByDue.at(i)->GetMaxChargeTime())*multi - 49, 450);
+		//carsByDue.at(i)->GetIcon()->Draw(180 + (offset + carsByDue.at(i)->GetMaxChargeTime())*multi - 49, 450);
 		offset += carsByDue.at(i)->GetMaxChargeTime();
+
+		if (startTime + offset > carsByDue.at(i)->GetDueTime())
+		{
+			text->Draw(200 + (offset - carsByDue.at(i)->GetMaxChargeTime())*multi + 10, 483
+				, ToTime((int)(startTime + offset - carsByDue.at(i)->GetDueTime())), 255, 0, 0);
+
+			//DrawRect(200 + (offset + (double)startTime - carsFinalDraw.at(i)->GetDueTime() + carsFinalDraw.at(i)->GetMaxChargeTime())*multi + 2, 570, 5, 3 * 4, 240, 0, 0);
+		}
 	}
 
 	offset = 0;
@@ -86,14 +124,25 @@ void Game::DrawSchedule()
 	for (unsigned i = 0; i < carsFinalDraw.size(); i++)
 	{
 		
-		carsFinalDraw.at(i)->GetIcon()->Draw(180 + (offset + carsFinalDraw.at(i)->GetMaxChargeTime())*multi - 49, 550 + i*2);
+		SDL_Color color = carsFinalDraw.at(i)->GetColor();
+		DrawRect(200 + (offset)*multi + 2, 570, carsFinalDraw.at(i)->GetMaxChargeTime()*multi - 2, 40, color.r, color.g, color.b);
 
-		text->Draw(180 + (offset + carsFinalDraw.at(i)->GetMaxChargeTime())*multi - 49, 550 + i * 20 + 100, carsFinalDraw.at(i)->carcolour);
+
+		//carsFinalDraw.at(i)->GetIcon()->Draw(180 + (offset + carsFinalDraw.at(i)->GetMaxChargeTime())*multi - 49, 550 + i*2);
 
 		offset += carsFinalDraw.at(i)->GetMaxChargeTime();
+
+		if (startTime + offset > carsFinalDraw.at(i)->GetDueTime())
+		{
+			text->Draw(200 + (offset - carsFinalDraw.at(i)->GetMaxChargeTime())*multi + 10, 583, ToTime((int)(startTime + offset - carsFinalDraw.at(i)->GetDueTime())), 255, 0, 0);
+
+			//DrawRect(200 + (offset + (double)startTime - carsFinalDraw.at(i)->GetDueTime() + carsFinalDraw.at(i)->GetMaxChargeTime())*multi + 2, 570, 5, 3 * 4, 240, 0, 0);
+		}
 	}
 
-	sprBar->Draw(160 + barOffset*multi, 446);
+	DrawRect(180 + barOffset*multi, 446, 3, 200, 0, 0, 0);
+
+	//sprBar->Draw(180 + barOffset*multi, 446);
 }
 
 void Game::Sort()
@@ -111,12 +160,7 @@ void Game::Sort()
 	for (unsigned i = 0; i < carsWaiting.size(); i++)
 	{
 		finishTime += carsWaiting.at(i)->GetMaxChargeTime();
-
-		printf((std::to_string(carsWaiting.at(i)->GetMaxChargeTime()) + " + ").c_str());
-		cout << "\n";
 	}
-
-	printf(("Hey: " + std::to_string(finishTime) + "  \n").c_str());
 
 	// Sort cars by the time they are due.
 	while (carsWaiting.size() > 0)
@@ -188,6 +232,36 @@ void Game::Sort()
 		carsFinal.push_back(carsLate.at(i));
 		carsFinalDraw.push_back(carsLate.at(i));
 	}
+
+	dueLateness = 0.0;
+	dueLatenessAmm = 0;
+	double temp = gTime;
+	for (unsigned i = 0; i < carsByDue.size(); i++)
+	{
+		temp += carsByDue.at(i)->GetMaxChargeTime();
+
+		// If the car is late, add the amount of lateness to it
+		if (temp > carsByDue.at(i)->GetDueTime())
+		{
+			dueLateness += temp - carsByDue.at(i)->GetDueTime();
+			dueLatenessAmm++;
+		}
+	}
+
+	hodgeLateness = 0.0;
+	hodgeLatenessAmm = 0;
+	temp = gTime;
+	for (unsigned i = 0; i < carsFinal.size(); i++)
+	{
+		temp += carsFinal.at(i)->GetMaxChargeTime();
+
+		// If the car is late, add the amount of lateness to it
+		if (temp > carsFinal.at(i)->GetDueTime())
+		{
+			hodgeLateness += temp - carsFinal.at(i)->GetDueTime();
+			hodgeLatenessAmm++;
+		}
+	}
 }
 
 std::string Game::ThousandString(std::string pass)
@@ -251,8 +325,6 @@ void Game::CalcWaitingTime()
 
 	for (unsigned i = 0; i < cars.size(); i++)
 	{
-		cars.at(i)->Draw();
-
 		// Cars that are charging do not count as "waiting" (their time is not being wasted afterall).
 		if (cars.at(i)->GetChargeMe())
 		{
@@ -338,6 +410,9 @@ Game::~Game()
 	{
 		delete cars.at(i);
 	}
+
+	delete btnPause;
+	delete btnPlay;
 
 	delete spr;
 	delete sprBar;

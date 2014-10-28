@@ -11,6 +11,7 @@ extern SDL_Surface *screen;
 extern long int gMillis;
 extern long int gTime;
 extern int gFramesToSeconds;
+extern bool gPause;
 
 //Mouse info
 static bool clickedThisFrame;
@@ -50,6 +51,14 @@ inline void DrawRect(int posX, int posY, int width, int height, Uint8 r, Uint8 g
 	SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format, r, g, b));
 }
 
+inline void DrawLine(int x1, int y1, int x2, int y2)
+{
+	for (unsigned i = x1; i < x2; i++)
+	{
+
+	}
+}
+
 inline std::string ToTime(int val)
 {
 	std::string m = std::to_string(val / 60);
@@ -68,6 +77,8 @@ inline double GetTimeDouble()
 
 inline void IncrementTime()
 {
+	if (gPause) return;
+
 	gMillis++;
 
 	if (gMillis > gFramesToSeconds)

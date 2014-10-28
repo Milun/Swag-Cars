@@ -15,6 +15,7 @@ SDL_Surface *screen;
 long int gMillis = 0;
 long int gTime = 0;
 int gFramesToSeconds = 100;
+bool gPause = false;
 
 bool delay = false;
 
@@ -83,20 +84,14 @@ int main(int argc, char *argv[])
 			if (ev.type == SDL_QUIT) // Detect if the X (close) button is pressed.
 				quitGame = true;
 
+			if (ev.type == SDLK_SPACE)
+			{
+				gPause = false;
+				cout << "test";
+			}
+
 			switch (ev.type)
 			{
-			case SDL_QUIT:
-				quitGame = true;
-				break;
-
-			case SDL_KEYDOWN:
-				printf("Key press detected\n");
-				break;
-
-			case SDL_KEYUP:
-				printf("Key release detected\n");
-				break;
-			
 			case SDL_MOUSEBUTTONDOWN:
 				clickedThisFrame = true;
 				clickPosX = ev.motion.x;

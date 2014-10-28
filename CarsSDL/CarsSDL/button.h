@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "sprite.h"
+#include <string>
 
 class Button
 {
@@ -12,7 +13,7 @@ class Button
 
 	public:
 		Button();
-		Button(int nx,int ny, int nw, int nh, Sprite* nSprite);
+		Button(int nx,int ny, int nw, int nh, std::string nSprite);
 		~Button();
 		bool ClickedOnThisFrame();
 

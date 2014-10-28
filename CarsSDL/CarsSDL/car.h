@@ -17,6 +17,8 @@ private:
 
 		double timeDue = 0;
 
+		SDL_Color color;
+
 		char mode = 'n';
 
 		double waitTime = 0;
@@ -41,7 +43,7 @@ public:
 
 	static int count; //How many cars there are
 
-	Car(int _x, std::string _sprite, std::string _icon);
+	Car(int _x, std::string _sprite, std::string _icon, SDL_Color _color);
 	~Car();
 
 	inline double GetChargeCurrent() { return chargeCurrent; };
@@ -58,6 +60,7 @@ public:
 	inline double GetDueTime() { return timeDue; };
 
 	inline Sprite* GetIcon() { return spriteIcon; };
+	inline SDL_Color GetColor() { return color; };
 
 	bool Charge();
 	void StopCharge();

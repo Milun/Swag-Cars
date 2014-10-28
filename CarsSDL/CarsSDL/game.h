@@ -6,6 +6,7 @@
 #include "text.h"
 #include "global.h"
 #include "graph.h"
+#include "button.h"
 
 #include <map>
 #include <string>
@@ -17,6 +18,9 @@ class Game
 {
 private:
 	Car* currentCar = nullptr;
+
+	Button* btnPause;
+	Button* btnPlay;
 
 	Sprite *spr;
 	Sprite *sprBar;
@@ -31,6 +35,11 @@ private:
 	vector<Car*> carsLate;
 	vector<Car*> carsFinal;
 	vector<Car*> carsFinalDraw;
+
+	double dueLateness = 0.0;
+	int dueLatenessAmm = 0;
+	double hodgeLateness = 0.0;
+	int hodgeLatenessAmm = 0;
 
 	double startTime = 0;
 	double finishTime = 0;
@@ -58,6 +67,8 @@ private:
 	void CalcWaitingTime();
 
 	void DrawSchedule();
+
+	void UpdateButtons();
 
 public:
 	Game();

@@ -7,9 +7,16 @@ Button::Button()
 	sprite = nullptr;
 }
 
-Button::Button(int nx, int ny, int nw, int nh, Sprite* nsprite)
+Button::Button(int nx, int ny, int nw, int nh, std::string nsprite)
 {
-	x = nx; y = ny; width = nw;  height = nh;  sprite = nsprite;
+	x = nx; y = ny; width = nw;  height = nh; 
+	
+	sprite = new Sprite(nsprite);
+}
+
+Button::~Button()
+{
+	delete sprite;
 }
 
 bool Button::ClickedOnThisFrame()
@@ -23,6 +30,7 @@ bool Button::ClickedOnThisFrame()
 		{
 			if (clickY < y + height && clickY > y)
 			{
+				std::cout << "Button clicked";
 				return true;
 			}
 		}
