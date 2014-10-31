@@ -6,8 +6,8 @@ Game::Game()
 	spr = new Sprite("spr_charge.png");
 	sprBar = new Sprite("spr_bar.png");
 
-	btnPause = new Button(870, 700, 48, 48, "spr_pause.bmp");
-	btnPlay = new Button(820, 700, 48, 48, "spr_play.bmp");
+	btnPause = new Button(850, 30, 48, 48, "spr_pause.bmp");
+	btnPlay = new Button(850, 30, 48, 48, "spr_play.bmp");
 
 	text = new Text("lucon.ttf");
 	textTime = new Text("lucon.ttf", 28);
@@ -37,10 +37,8 @@ void Game::Draw()
 
 	DrawRect(0, 220, 800, 210, 214, 237, 227);
 
-	text->Draw(850, 10, "Profit: $" + ThousandString(std::to_string(profit)) + ".00" );
-	text->Draw(850, 40, "Total waiting time caused: " + SecondsToTime(timeWasted) + " (+" + std::to_string(noOfWaitingCars) + ") per second");
-
-	
+	//text->Draw(850, 10, "Profit: $" + ThousandString(std::to_string(profit)) + ".00" );
+	//text->Draw(850, 40, "Total waiting time caused: " + SecondsToTime(timeWasted) + " (+" + std::to_string(noOfWaitingCars) + ") per second");
 
 	textTime->Draw(850, 100, ToTime((int)gTime));
 	
@@ -58,30 +56,51 @@ void Game::Draw()
 
 		ChargeCars();
 		CalcWaitingTime();
+
+		btnPause->Draw();
+	}
+	else
+	{
+		btnPlay->Draw();
 	}
 
 	for (unsigned i = 0; i < cars.size(); i++)
 	{
 		cars.at(i)->Draw();
 	}
-
+	
 	DrawSchedule();
 	UpdateButtons();
 
-	text->Draw(810, 470, ToTime((int)dueLateness));
-	text->Draw(810, 490, std::to_string(dueLatenessAmm));
+	text->Draw(825, 470, "Late Seconds: " + ToTime((int)dueLateness));
+	text->Draw(825, 490, "Late Cars:    " + std::to_string(dueLatenessAmm));
 
-	text->Draw(810, 570, ToTime((int)hodgeLateness));
-	text->Draw(810, 590, std::to_string(hodgeLatenessAmm));
+	text->Draw(825, 570, "Late Seconds: " + ToTime((int)hodgeLateness));
+	text->Draw(825, 590, "Late Cars:    " + std::to_string(hodgeLatenessAmm));
 
-	btnPlay->Draw();
-	btnPause->Draw();
+	
+	
 }
 
 void Game::UpdateButtons()
 {
-	if (btnPause->ClickedOnThisFrame()) gPause = false;
-	if (btnPlay->ClickedOnThisFrame()) gPause = true;
+	if (btnPause->ClickedOnThisFrame() && !gPause)
+	{
+		for (unsigned i = 0; i < cars.size(); i++)
+		{
+			cars.at(i)->Reset();
+			
+		}
+		carsFinal.clear();
+		carsFinalDraw.clear();
+		carsByDue.clear();
+
+		currentCar = nullptr;
+		finishTime = 0.0;
+		gPause = true;
+	}
+	else
+	if (btnPlay->ClickedOnThisFrame() && gPause) gPause = false;
 }
 
 void Game::DrawSchedule()

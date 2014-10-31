@@ -9,13 +9,16 @@ class Button
 {
 	private:
 		Sprite* sprite;
-		int		x, y, width, height;
+		int width, height;
 
 	public:
+		int		x, y;
+
 		Button();
 		Button(int nx,int ny, int nw, int nh, std::string nSprite);
 		~Button();
 		bool ClickedOnThisFrame();
+		bool Clicked();
 
 		void Draw();
 };

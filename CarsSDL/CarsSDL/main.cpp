@@ -15,9 +15,13 @@ SDL_Surface *screen;
 long int gMillis = 0;
 long int gTime = 0;
 int gFramesToSeconds = 100;
-bool gPause = false;
+bool gPause = true;
 
 bool delay = false;
+
+bool clickedThisFrame = false;
+bool click = false;
+int clickPosX, clickPosY = 0;
 
 #include "global.h"
 #include "button.h"
@@ -57,7 +61,7 @@ int main(int argc, char *argv[])
 	
 	srand(time(NULL));
 
-	SDL_Window* window = SDL_CreateWindow("Font Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1200, 800, SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow("Font Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1100, 700, SDL_WINDOW_SHOWN);
 	screen = SDL_GetWindowSurface(window);
 
 	game = new Game();
@@ -72,8 +76,6 @@ int main(int argc, char *argv[])
 
 	while (!quitGame)
 	{
-		clickedThisFrame = false;
-
 		SDL_FillRect(screen, NULL, 0xffffff);
 		IncrementTime();
 
@@ -96,14 +98,20 @@ int main(int argc, char *argv[])
 				clickedThisFrame = true;
 				clickPosX = ev.motion.x;
 				clickPosY = ev.motion.y;
+				click = true;
 				break;
 
 			default:
+				click = false;
 				break;
 			}
 		}
 
 		game->Draw();
+
+		
+
+		clickedThisFrame = false;
 
 		SDL_UpdateWindowSurface(window);
 		SDL_Delay(0);

@@ -6,6 +6,7 @@
 #include "global.h"
 #include "text.h"
 #include "sprite.h"
+#include "button.h"
 #include <math.h>
 
 class Car
@@ -15,7 +16,8 @@ private:
 		int x, y;
 		float yDraw;
 
-		double timeDue = 0;
+		double timeDue = 0.0;
+		double addTime = 0.0;
 
 		SDL_Color color;
 
@@ -28,6 +30,14 @@ private:
 		Sprite* spriteIcon;
 		Sprite* spriteBubble;
 
+		Button* btnBubble;
+		Button* btnReturn;
+
+		Button* btnL1;
+		Button* btnL2;
+		Button* btnR1;
+		Button* btnR2;
+
 		double chargeCurrent;
 		double chargeRate;
 		double chargeMax;
@@ -37,9 +47,14 @@ private:
 
 		bool chargeMe;
 
+		bool active = false;
+
 		void Update();
+		
 public:
 	std::string carcolour;
+
+	void Reset();
 
 	static int count; //How many cars there are
 

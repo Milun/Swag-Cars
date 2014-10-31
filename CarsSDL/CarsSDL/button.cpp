@@ -39,6 +39,25 @@ bool Button::ClickedOnThisFrame()
 	return false;
 }
 
+bool Button::Clicked()
+{
+	if (click)
+	{
+		int clickX = clickPosX;
+		int clickY = clickPosY;
+
+		if (clickX < x + width && clickX > x)
+		{
+			if (clickY < y + height && clickY > y)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 void Button::Draw()
 {
 	sprite->Draw(x, y);

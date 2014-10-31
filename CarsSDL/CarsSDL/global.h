@@ -14,8 +14,9 @@ extern int gFramesToSeconds;
 extern bool gPause;
 
 //Mouse info
-static bool clickedThisFrame;
-static int clickPosX, clickPosY;
+extern bool clickedThisFrame;
+extern bool click;
+extern int clickPosX, clickPosY;
 //End mouse info
 
 /*SDL_Surface *surfaceRect;*/
