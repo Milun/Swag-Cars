@@ -30,7 +30,6 @@ bool Button::ClickedOnThisFrame()
 		{
 			if (clickY < y + height && clickY > y)
 			{
-				std::cout << "Button clicked";
 				return true;
 			}
 		}

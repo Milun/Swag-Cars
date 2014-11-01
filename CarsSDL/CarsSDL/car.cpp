@@ -33,11 +33,13 @@ Car::Car(int _x, std::string _sprite, std::string _icon, SDL_Color _color)
 	yDraw = 0.0f;
 
 	chargeRate = (float)(rand() % 4 + 1) * 0.1f;
-	chargeUse = (float)(/*rand() %*/ 20 + 6)  / 100.0f;
+	chargeUse = 2.0;
 	chargeMax = 100.0;
 	chargeCurrent = chargeMax;
 
-	addTime = GetChargeTime() + 2 + rand() % 20;
+	addTime = GetMaxChargeTime() + 10;
+
+	//addTime = GetChargeTime() + 2 + rand() % 20;
 }
 
 void Car::Update()

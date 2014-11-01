@@ -29,6 +29,12 @@ Game::Game()
 			"spr_car_" + std::to_string(i) + ".png",
 			"spr_icon_" + std::to_string(i) + ".png", color[i]));
 	}
+
+	system("CLS");
+
+	std::cout << "================================================================================";
+	std::cout << "                           SORTING DATA HISTORY\n";
+	std::cout << "================================================================================\n";
 }
 
 void Game::Draw()
@@ -281,6 +287,11 @@ void Game::Sort()
 			hodgeLatenessAmm++;
 		}
 	}
+
+	std::cout << "ByDue Late Time: " + std::to_string(dueLateness) + "    ";
+	std::cout << "ByDue Late Cars: " + std::to_string(dueLatenessAmm) + "\n";
+	std::cout << "Hodge Late Time: " + std::to_string(hodgeLateness) + "    ";
+	std::cout << "Hodge Late Cars: " + std::to_string(hodgeLatenessAmm) + "\n\n";
 }
 
 std::string Game::ThousandString(std::string pass)
